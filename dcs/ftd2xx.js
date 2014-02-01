@@ -129,8 +129,9 @@ exports.getD2XX = function() {
     };
 
     d2x.getQueueStatus = function() {
-        console.log('Get Queue Status');
+        //console.log('Get Queue Status');
         var qst = this.jna.Memory(8);
+        qst.clear();
         var status = this.FT_GetQueueStatus.invokeInt([
             this.fh,
             qst
@@ -139,11 +140,36 @@ exports.getD2XX = function() {
             console.log('FT_GetQueueStatus return status: ' + status);
 
         } else {
-            console.log('FT_GetQueueStatus: ' + qst.getLong(0));
+            //console.log('FT_GetQueueStatus: ' + qst.getLong(0));
             return qst.getLong(0);
         }
         return -1;
-    }
+    };
+
+    d2x.read = function(iNumBytes) {
+        //console.log('Read ' + iNumBytes);
+        var buf = this.jna.Memory(iNumBytes);
+        buf.clear();
+        var bytesWritten = this.jna.Memory(8);
+        bytesWritten.clear();
+
+        var status = this.FT_Read.invokeInt([
+            this.fh,
+            buf,
+            this.jna.NativeLong(iNumBytes),
+            bytesWritten
+        ]);
+
+        if(status > 0 ) {
+            console.log('Error Reading Stream ' + status);
+            return undefined;
+        } else {
+            //console.log('Readed ' + bytesWritten.getInt(0) + ' Bytes');
+            var charbuf = buf.getByteBuffer(0, bytesWritten.getInt(0));
+            //console.log(charbuf);
+            return charbuf;
+        }
+    };
 
     return d2x;
 };

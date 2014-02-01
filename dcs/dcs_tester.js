@@ -24,17 +24,54 @@ if( port.open(0)== 0) {
     port.purge(3);
 
     var count = 0;
-    vertx.setPeriodic(100, function(id){
-        console.log('Periodic ' + count);
+    var trueCount = 0;
+    var locked = false;
+    var proe = 0;
+    vertx.setPeriodic(1, function(id){
+        //console.log('Periodic ' + count);
         count++;
-        port.getQueueStatus();
-        if(count === 100) {
+        var bytes = port.getQueueStatus();
+
+        if(locked){
+            if(bytes >= 747) {
+                var buffer = port.read(bytes);
+            }
+
+            // TODO: Change to actual readed buffer length
+            if(bytes == 747){
+                trueCount++;
+                //console.log('Pkt: ' + trueCount);
+                //
+            } else {
+                if(bytes > 747){
+                    locked = false;
+                    proe++;
+                    console.log('Proe:  ' + proe);
+                    console.log('Bytes: ' + bytes);
+                    console.log('Curr:  ' + trueCount);
+                }
+            }
+
+        } else {
+            if(bytes > 0) {
+                console.log('Not locked, reading ' + bytes + ' bytes');
+                port.read(bytes);
+            } else {
+                locked = true;
+                console.log('Buffer is empty. Locking alrogithm');
+            }
+        }
+
+
+        if(count === 1000000) {
             vertx.cancelTimer(id);
+            console.log('Done:       ' + (count/trueCount) + ' ms');
+            console.log('Proe:       ' + proe);
+            console.log('TrueCounts: ' + trueCount);
+            console.log('%:          ' + (proe/trueCount*100));
         }
     });
 
-    port.getQueueStatus();
 
 }
 
-console.log('Done');
