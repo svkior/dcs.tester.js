@@ -11,6 +11,8 @@ console.log('Try to Call ftd2xx');
 
 ftd2xx.doHello();
 
-var port = ftd2xx.openD2xx();
+var port = ftd2xx.getD2XX();
+
+port.open(0);
 
 console.log('Done');
