@@ -21,6 +21,7 @@ var getD2xx = function() {
     return d2xx;
 };
 
+
 exports.openD2xx = function() {
     var d2x = getD2xx();
     console.log('openD2x');
