@@ -117,7 +117,7 @@ exports.getD2XX = function() {
     };
 
     d2x.purge = function(lMask) {
-        console.log('Purge port with mask ' + lMask);
+        console.log('Purge port with mask' + lMask);
         var status = this.FT_Purge.invokeInt([
             this.fh,
             this.jna.NativeLong(lMask)
@@ -127,6 +127,23 @@ exports.getD2XX = function() {
         }
         return status;
     };
+
+    d2x.getQueueStatus = function() {
+        console.log('Get Queue Status');
+        var qst = this.jna.Memory(8);
+        var status = this.FT_GetQueueStatus.invokeInt([
+            this.fh,
+            qst
+        ]);
+        if(status > 0) {
+            console.log('FT_GetQueueStatus return status: ' + status);
+
+        } else {
+            console.log('FT_GetQueueStatus: ' + qst.getLong(0));
+            return qst.getLong(0);
+        }
+        return -1;
+    }
 
     return d2x;
 };

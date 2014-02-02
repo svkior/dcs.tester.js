@@ -3,6 +3,7 @@
  */
 
 var console = require('vertx/console');
+var vertx = require('vertx');
 var ftd2xx = require('dcs/ftd2xx.js');
 
 console.log('DCS Tester deployed.');
@@ -21,6 +22,19 @@ if( port.open(0)== 0) {
     port.setTimeouts(1,1);
     port.setUSBParameters(16384, 16384);
     port.purge(3);
+
+    var count = 0;
+    vertx.setPeriodic(100, function(id){
+        console.log('Periodic ' + count);
+        count++;
+        port.getQueueStatus();
+        if(count === 100) {
+            vertx.cancelTimer(id);
+        }
+    });
+
+    port.getQueueStatus();
+
 }
 
 console.log('Done');
