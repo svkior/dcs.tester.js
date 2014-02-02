@@ -27,8 +27,10 @@ exports.getD2XX = function() {
     var d2x = {};
     var lib = getD2xx();
     d2x.jna = Packages.com.sun.jna;
+    d2x.fh = 0;
     d2x.FT_Open = lib.getFunction("FT_Open");
     d2x.FT_SetLatencyTimer = lib.getFunction("FT_SetLatencyTimer");
+    d2x.FT_GetLatencyTimer = lib.getFunction("FT_GetLatencyTimer");
     d2x.FT_SetTimeouts = lib.getFunction("FT_SetTimeouts");
     d2x.FT_SetUSBParameters = lib.getFunction("FT_SetUSBParameters");
     d2x.FT_Purge = lib.getFunction("FT_Purge");
@@ -37,15 +39,54 @@ exports.getD2XX = function() {
     d2x.FT_Read = lib.getFunction("FT_Read");
     d2x.FT_Write = lib.getFunction("FT_Write");
 
+    // Открыть порт по индексу устройства
+    // Возвращает статусы
+    // 0 - открыт
+    // 2 - не дали доступ к девайсу (или не воткнут девайс)
+    // 3 - не дали доступ к девайсу (потому что ftdi_sio)
     d2x.open = function(iPort) {
         console.log('D2x Opened on port ' + iPort);
         var devNumber = this.jna.NativeLong(0);
-        var pftHandle = this.jna.Memory(8);
-        var status = this.FT_Open.invokeInt([devNumber, pftHandle]);
-        console.log('Device return status: ');
-        console.log(status);
-        return status;
+        var pfH = this.jna.Memory(8);
+        pfH.clear();
+        console.log('Current pfH ' + pfH.getLong(0));
+        var status = this.FT_Open.invokeInt([devNumber, pfH]);
+
+        if(status > 0) {
+            console.log('Device return status: ' + status);
+        } else {
+            this.fh = this.jna.NativeLong(pfH.getLong(0));
+            console.log('Device opened with handler ' +  this.fh);
+        }
+
+       return status;
     };
+
+    d2x.setLatencyTimer = function (iTimeout){
+      console.log('D2x setLatency Timer to ' + iTimeout + ' with fhandle ' + this.fh);
+      var ltm = this.jna.IntegerType();
+      ltm.setValue(iTimeout);
+      var status = this.FT_SetLatencyTimer.invokeInt([this.fh, ltm]);
+
+        if(status > 0) {
+            console.log('Device return status: ' + status);
+        }
+        return status;
+
+    };
+
+    d2x.getLatencyTimer = function(){
+        console.log('Try to get Latency Timer from fhandle' + this.fh);
+        var ltv = this.jna.Memory(1);
+        var status = this.FT_GetLatencyTimer.invokeInt([this.fh, ltv]);
+        if(status >0){
+            console.log('Device return status:' + status);
+            return -1;
+        } else {
+            console.log('Latency = ' + ltv.getByte(0));
+            return ltv.getByte(0);
+        };
+    }
 
     return d2x;
 };
