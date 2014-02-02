@@ -92,7 +92,41 @@ exports.getD2XX = function() {
         }
     };
 
+    d2x.setTimeouts = function(iReadTimeout, iWriteTimeout) {
+        console.log('set Read Timeout to ' + iReadTimeout + ', Set Write Timeout to ' + iWriteTimeout);
+        var status = this.FT_SetTimeouts.invokeInt([this.fh, this.jna.NativeLong(iReadTimeout),  this.jna.NativeLong(iWriteTimeout)]);
+        if(status > 0) {
+            console.log('FT_SetTimeouts return status: ' + status);
+        }
+        return status;
+    };
 
+    d2x.setUSBParameters = function(lInTransferSize, lOutTransferSize) {
+        console.log('Set USB Parameters to ' + lInTransferSize + ', ' + lOutTransferSize);
+        var status = this.FT_SetUSBParameters.invokeInt(
+            [
+                this.fh,
+                this.jna.NativeLong(lInTransferSize),
+                this.jna.NativeLong(lOutTransferSize)
+            ]
+        );
+        if(status > 0) {
+            console.log('FT_SetUSBParameters return status: ' + status);
+        }
+        return status;
+    };
+
+    d2x.purge = function(lMask) {
+        console.log('Purge port with mask ' + lMask);
+        var status = this.FT_Purge.invokeInt([
+            this.fh,
+            this.jna.NativeLong(lMask)
+        ]);
+        if(status > 0) {
+            console.log('FT_Purge return status: ' + status);
+        }
+        return status;
+    };
 
     return d2x;
 };

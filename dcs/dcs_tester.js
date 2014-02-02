@@ -17,6 +17,10 @@ if( port.open(0)== 0) {
     if(port.getLatencyTimer() != checkSetLatency){
         console.log("Latency Timer is not set");
     }
+
+    port.setTimeouts(1,1);
+    port.setUSBParameters(16384, 16384);
+    port.purge(3);
 }
 
 console.log('Done');
