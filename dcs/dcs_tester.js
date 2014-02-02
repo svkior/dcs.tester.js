@@ -12,11 +12,11 @@ var port = ftd2xx.getD2XX(); // Получили объект общения с 
 // Пробуем открыть порт
 if( port.open(0)== 0) {
     //Открыли порт
-    port.setLatencyTimer(10); // Внутренний таймаут чипа ставим в минимум (2мс)
-    console.log(port.getLatencyTimer());
-    port.setLatencyTimer(20); // Внутренний таймаут чипа ставим в минимум (2мс)
-    console.log(port.getLatencyTimer());
+    var checkSetLatency = 2;
+    port.setLatencyTimer(checkSetLatency); // Внутренний таймаут чипа ставим в минимум (2мс)
+    if(port.getLatencyTimer() != checkSetLatency){
+        console.log("Latency Timer is not set");
+    }
 }
-
 
 console.log('Done');

@@ -62,10 +62,11 @@ exports.getD2XX = function() {
        return status;
     };
 
+    // Установка Latency Таймера
+    // Значение в милисекундах
     d2x.setLatencyTimer = function (iTimeout){
       console.log('D2x setLatency Timer to ' + iTimeout + ' with fhandle ' + this.fh);
-      var ltm = this.jna.IntegerType();
-      ltm.setValue(iTimeout);
+      var ltm = Packages.java.lang.Byte(iTimeout);
       var status = this.FT_SetLatencyTimer.invokeInt([this.fh, ltm]);
 
         if(status > 0) {
@@ -75,6 +76,9 @@ exports.getD2XX = function() {
 
     };
 
+    // Получение значения Latency Таймера
+    // -1 - Ошибка
+    // Либо число в милисекундах
     d2x.getLatencyTimer = function(){
         console.log('Try to get Latency Timer from fhandle' + this.fh);
         var ltv = this.jna.Memory(1);
@@ -85,8 +89,10 @@ exports.getD2XX = function() {
         } else {
             console.log('Latency = ' + ltv.getByte(0));
             return ltv.getByte(0);
-        };
-    }
+        }
+    };
+
+
 
     return d2x;
 };
