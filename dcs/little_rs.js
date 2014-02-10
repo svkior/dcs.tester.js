@@ -49,5 +49,9 @@ exports.getLUSB = function() {
        return this.sp.readBytes(iNumBytes);
     };
 
+    lusb.write = function(oString){
+       return this.sp.writeString(oString);
+    };
+
     return lusb;
 };

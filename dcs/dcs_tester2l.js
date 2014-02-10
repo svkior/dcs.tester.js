@@ -48,6 +48,7 @@ if( port.open('/dev/ttyUSB0')== 0) {
                 trueCount++;
                 console.log('Pkt: ' + trueCount);
                 //
+		port.write('123');
             } else {
                 if(bytes > 747){
                     locked = false;
