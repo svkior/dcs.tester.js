@@ -175,11 +175,6 @@ exports.getD2XX = function() {
 };
 
 
-exports.doHello = function() {
-    console.log("Hello, World");
-
-};
-
 
 //  p = open(Number)  - открытие порта с определенным номером, p - это ссылка на объект
 //  p.setLattencyTimer(iLattency) - установка таймера летенси
