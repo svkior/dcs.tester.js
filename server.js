@@ -12,7 +12,10 @@ console.log('Launching dcs_tester');
 
 var container = require('vertx/container');
 
-container.deployVerticle('dcs/dcs_tester.js');
+//container.deployVerticle('dcs/dcs_tester.js');
+
+container.deployVerticle('dcs_tester.js');
+
 
 /*
 var cLib;

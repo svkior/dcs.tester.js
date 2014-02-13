@@ -6,10 +6,10 @@ var console = require('vertx/console');
 
 
 
-exports.getUboot = function() {
+exports.getUboot = function(iPortName) {
     var uboot = {};
 
-    uboot.sp = Packages.jssc.SerialPort("/dev/cu.usbserial");
+    uboot.sp = Packages.jssc.SerialPort(iPortName);
     uboot.sp.openPort();
     uboot.sp.setParams(115200, 8, 1, 0);
     var bc1 = uboot.sp.getInputBufferBytesCount();
