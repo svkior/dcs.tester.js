@@ -12,15 +12,17 @@
 
 Сделать файл _netrc
 В нем написать
-machine bitbucket.org
-login <username>
-password <password>
+
+    machine bitbucket.org
+    login <username>
+    password <password>
 
 в git bash или куда хотите
-git clone https://bitbucket.org/tts/dcs.tester.js
 
-cd dcs.tester.js
-run.cmd
+    $ git clone https://bitbucket.org/tts/dcs.tester.js
+
+    $ cd dcs.tester.js
+    $ run.cmd
 
 
 
