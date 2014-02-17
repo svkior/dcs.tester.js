@@ -104,15 +104,3 @@ eventBus.registerHandler('ubtests.run', function(args, responder){
         });
     });
 });
-
-
-switch(osName){
-    case 'Linux':
-        ubootIf.getUboot('/dev/ttyUSB0');
-        break;
-    case 'Mac OS X':
-        //ubootIf.getUboot('/dev/cu.usbserial');
-        break;
-    default:
-        console.log('Unsupported OS: ' + osName);
-}
