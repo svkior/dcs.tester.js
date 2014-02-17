@@ -78,6 +78,29 @@ eventBus.registerHandler('ubtests.delete', function(args, responder) {
     });
 });
 
+eventBus.registerHandler('ubtests.getports', function(args, responder){
+    var ports = [];
+    switch(osName){
+        case 'Linux':
+            //TODO: Self searching
+             ports.push('/dev/ttyUSB0');
+             ports.push('/dev/ttyUSB1');
+             ports.push('/dev/ttyUSB2');
+             ports.push('/dev/ttyUSB3');
+             break;
+        case 'Mac OS X':
+             //TODO: Self searching
+             ports.push('/dev/cu.usbserial');
+             break;
+         default :
+             break;
+     }
+    responder({
+        status: 'ok',
+        ports: ports
+    });
+});
+
 
 eventBus.registerHandler('ubtests.run', function(args, responder){
     console.log('Runing test:');
@@ -99,7 +122,6 @@ eventBus.registerHandler('ubtests.run', function(args, responder){
         response += res;
         console.log('response: \n'+response);
         responder({
-            status: 'ok',
             response: response
         });
     });

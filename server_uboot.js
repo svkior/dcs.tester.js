@@ -19,7 +19,8 @@ container.deployModule('io.vertx~mod-web-server~2.0.0-final', {
         { address: 'ubtests.save' },
         { address: 'ubtests.delete' },
         { address: 'ubtests.find' },
-        { address: 'ubtests.run'}
+        { address: 'ubtests.run'},
+        { address: 'ubtests.getports'}
     ]
 });
 container.deployModule("io.vertx~mod-mongo-persistor~2.0.0-final",{

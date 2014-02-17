@@ -5,7 +5,17 @@ function UbTestEditor(ubTest, eventBus) {
     var ta = $('<textarea>').attr('cols',60).attr('rows', 20).text(ubTest.test);
     // TODO: Запретить редактиование
     var ta2 = $('<textarea>').attr('cols',60).attr('rows', 20).text('Лог');
-    var inp = $('<input>').attr('value', '/dev/cu.usbserial');
+
+    var inp = $('<select>');
+    eventBus.send('ubtests.getports',{}, function(resp){
+        console.log('GET PORTS');
+        inp.empty();
+        for(var k=0; k< resp.ports.length; k++){
+            console.log(resp.ports[k]);
+            inp.append('<option value="' + resp.ports[k] + '"> ' + resp.ports[k] + '</option>' )
+        }
+    });
+
     var runTest = function(){
         console.log('Run Test');
         ubTest.test = ta.val();
@@ -38,10 +48,10 @@ function UbTestEditor(ubTest, eventBus) {
     ta.appendTo('.editor');
     ta2.appendTo('.editor');
     var ul = $('<ul>');
-    $('<li>').text('writeb 0xaddr 0xval: запись байта').appendTo(ul);
-    $('<li>').text('writed 0xaddr 0xval: запись двойного слова').appendTo(ul);
-    $('<li>').text('dump 0xaddr 0xcount - дамп памяти').appendTo(ul);
-    $('<li>').text('writeb 0xaddr 0xval: запись байта').appendTo(ul);
+    $('<li>').text('mw.b 0xaddr 0xval -  запись байта').appendTo(ul);
+    $('<li>').text('mw 0xaddr 0xval: запись двойного слова').appendTo(ul);
+    $('<li>').text('md.b 0xaddr 0xcount - дамп памяти побайтно').appendTo(ul);
+    $('<li>').text('md 0xaddr 0xcount - дамп памяти по двойным словам').appendTo(ul);
     $('<li>').text('finish: окончание теста').appendTo(ul);
     ul.appendTo('.editor');
     //alert("Editor constructed");
