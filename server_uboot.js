@@ -17,9 +17,14 @@ container.deployModule('io.vertx~mod-web-server~2.0.0-final', {
     inbound_permitted: [
         { address: 'ubtests.list' },
         { address: 'ubtests.save' },
-        { address: 'ubtests.delete' }
+        { address: 'ubtests.delete' },
+        { address: 'ubtests.find' },
+        { address: 'ubtests.run'}
     ]
 });
+container.deployModule("io.vertx~mod-mongo-persistor~2.0.0-final",{
+    address: "ubtests.persistor",
+    db_name: "ub_tests"
+});
 
-
-container.deployVerticle('dcs/dcs_tester2.js');
+container.deployVerticle('uboot_test2.js');

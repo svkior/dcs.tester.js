@@ -6,9 +6,14 @@ var console = require('vertx/console');
 
 
 
-exports.getUboot = function(iPortName) {
+exports.getUboot = function(iPortName, cmds, rcb) {
     var uboot = {};
 
+    uboot.inCommands = cmds;
+
+    console.log('Command length: ' + uboot.inCommands.length);
+
+    uboot.respCB = rcb;
     uboot.sp = Packages.jssc.SerialPort(iPortName);
     uboot.sp.openPort();
     uboot.sp.setParams(115200, 8, 1, 0);
@@ -19,6 +24,10 @@ exports.getUboot = function(iPortName) {
     uboot.sp.writeString("1\n");
     uboot.state_m = 'program';
     uboot.commands = [];
+
+    uboot.sendStr = function(cmdString){
+        uboot.commands.push({command:cmdString + '\n', times: 1});
+    }
 
     uboot.dumpDword = function(addr, size){
         var cmdString = 'md 0x' + addr.toString(16) + ' 0x' + size.toString(16) +'\n';
@@ -63,25 +72,29 @@ exports.getUboot = function(iPortName) {
     uboot.tmr = vertx.setPeriodic(100, function(id){
 
         if(uboot.state_m == 'program'){
-            uboot.dumpDword(0xffffec00, 4);
-            uboot.writeDword(0xffffec00, 0x00000000);
-            uboot.writeDword(0xffffec04, 0x0b080b08);
-            uboot.writeDword(0xffffec08, 0x000b000b);
-            uboot.writeDword(0xffffec0c, 0x00000000);
-            uboot.dumpDword(0xffffec00, 4);
-            var adr = 0x10000000;
-            for(var val = 0x00; val <= 0xff; val ++){
-                uboot.writeByte(adr+val,val);
+            console.log('Programming');
+            for(var j=0; j<uboot.inCommands.length; j++){
+                var cmd = uboot.inCommands[j];
+
+                if (cmd.indexOf('fini') != -1){
+                    console.log('FINISH');
+                    break;
+                }
+                console.log(cmd);
+                uboot.sendStr(cmd);
             }
-            uboot.dumpByte(0x10000000, 0x100);
             uboot.state_m = 'detect';
+            uboot.resp = '';
         }
         //console.log('TTT ' + uboot.needNext);
         var bc = uboot.sp.getInputBufferBytesCount();
         var strr;
         if((bc > 0) || uboot.needNext){
             //console.log("Get " + bc + " bytes.");
-            if(bc >0) strr = uboot.sp.readString(bc,1);
+            if(bc >0) {
+                strr = uboot.sp.readString(bc,1);
+                uboot.resp += strr;
+            }
             else strr = '';
             console.log("Got: " + strr);
 
@@ -120,6 +133,7 @@ exports.getUboot = function(iPortName) {
                         console.log("GOT ANY KEY");
                         uboot.sp.writeString("\n");
                         uboot.state_m = 'wait_prompt'
+                        uboot.resp = ''
                     }
                     break;
                 case 'wait_prompt':
@@ -137,16 +151,24 @@ exports.getUboot = function(iPortName) {
                         } else {
                             console.log('Empty commands');
                             uboot.state_m = 'finite';
+                            vertx.cancelTimer(uboot.tmr);
+                            uboot.sp.closePort();
+                            uboot.respCB(uboot.resp);
+                            console.log('Finish');
                         }
                     }
                     break;
                 case 'finite':
+                    console.log('STATE: FINITE');
                     if(uboot.needNext){
-                        console.log('WAIT!!!!')
+                        console.log('WAIT!!!!');
                         uboot.state_m = 'wait_prompt';
                         uboot.sp.writeString('\n');
                         uboot.needNext = false;
                     }
+                    vertx.cancelTimer(uboot.tmr);
+                    uboot.sp.closePort();
+                    uboot.respCB(uboot.resp);
                     console.log('Finish');
             }
         }

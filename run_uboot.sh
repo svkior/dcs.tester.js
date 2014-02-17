@@ -1,4 +1,4 @@
 #!/bin/sh
 sync
-vertx run uboot_test2.js -cp ./jssc.jar
+vertx run server_uboot.js -cp ./jssc.jar
 
