@@ -6,6 +6,18 @@ function showDriveCtrl(DriveID, DriveName, eventBus){
     var ul = $('<ul>');
     var graph = $('<div>');
     var curData = [];
+    var curTraj = [];
+    var curSpeed = [];
+    var curSpeedT = [];
+    var curAccel = [];
+    var curAccelT = [];
+    var oldData = [];
+    var oldTraj = [];
+    var oldSpeed = [];
+    var oldSpeedT = [];
+    var oldAccel = [];
+    var oldAccelT = [];
+
     var options = {
         series: {
             lines: { show: true },
@@ -17,77 +29,269 @@ function showDriveCtrl(DriveID, DriveName, eventBus){
         return false;
     };
 
-    var DriveGO = function(){
+    var DriveGO = function(cb){
         console.log('DRIVE');
-        eventBus.send('ecs.go',{DriveID:DriveID}, function(res){
+        goBtn.attr('disabled','disabled');
+        eventBus.send('ecs.go',{
+            DriveID:DriveID,
+            DriveGroup:4,
+            delayTime: delayTime,
+            L: L,
+            V: V,
+            A: A,
+            oneWay: oneWay
+        }, function(res){
             console.log('GOT RESPAWN!');
+            goBtn.removeAttr('disabled');
+            if(cb){
+                cb();
+            }
         });
         cbPing();
     };
 
-    var GetFTP = function(){
+    var GetFTP = function(cb){
         console.log('Get FTP');
+        ftpBtn.attr('disabled','disabled');
         eventBus.send('ftp.update',{}, function(res){
             console.log(res);
+            ftpBtn.removeAttr('disabled');
+            if(cb){
+                cb();
+            }
         });
         cbPing();
     };
 
-    var PlotGraph = function() {
+    var PlotGraph = function(cb) {
+        plotBtn.attr('disabled','disabled');
         console.log('Plot Graph');
         eventBus.send('ftp.load', {}, function(res){
            console.log(res);
+
+            oldData = curData;
+            oldTraj = curTraj;
+            oldSpeed = curSpeed;
+            oldSpeedT = curSpeedT;
+            oldAccel = curAccel;
+            oldAccelT = curAccelT;
+
+            curSpeed = [];
+            curSpeedT = [];
+            curAccel = [];
+            curAccelT = [];
+
             curData = res.data;
-            PlotPos();
+            curTraj = res.traj;
+            curUst = res.ust;
+            curSpeed[0] = 0;
+            curSpeedT[0] = 0;
+            curAccel[0] = 0;
+            curAccelT[0] = 0;
+            for(var i=1; i<(curData.length); i++){
+                curSpeed[i] = (curData[i] - curData[i-1])/0.025;
+                curSpeedT[i] = (curTraj[i] - curTraj[i-1])/0.025;
+                curAccel[i] = (curSpeed[i] - curSpeed[i-1])/0.025;
+                curAccelT[i] = (curSpeedT[i] - curSpeedT[i-1])/0.025;
+            }
+            currentPlot();
+            plotBtn.removeAttr('disabled');
+            if(cb){
+                cb();
+            }
         });
         cbPing();
     };
 
-    var PlotPos = function(){
-        graph.width(619).height(400);
+    var DoAll = function(){
+        allBtn.attr('disabled','disabled');
+        ftpBtn.attr('disabled','disabled');
+        plotBtn.attr('disabled','disabled');
+        goBtn.attr('disabled','disabled');
+
+        DriveGO(
+            function(){
+                GetFTP(
+                    function(){
+                        PlotGraph(function(){
+                            allBtn.removeAttr('disabled');
+                        });
+                    }
+                );
+            }
+        );
+        return false;
+    };
+
+    var MyPlot1 = function(tx1, dat1){
+        graph.width(800).height(600);
         var data =[
-            { label: "Позиция", data: [  ] }
+            { label: tx1, data: [ ] }
         ];
-        for(var i=0; i<curData.length; i++){
-            data[0].data[i] = [i, curData[i]];
+        var begin1 = zeroStart ? dat1[0] : 0;
+
+        for(var i=0; i<(dat1.length-skipLast-skipFirst); i++){
+            data[0].data[i] = [(i+skipFirst)*0.025, dat1[i+skipFirst] - begin1];
         }
-
-
         $.plot(graph, data, options);
+    };
+
+    var MyPlot2 = function(tx1, dat1, tx2, dat2){
+        graph.width(800).height(600);
+        var data =[
+            { label: tx1, data: [ ] },
+            { label: tx2, data: [ ]}
+        ];
+        var begin1 = zeroStart ? dat1[0] : 0;
+        var begin2 = zeroStart ? dat2[0] : 0;
+
+        for(var i=0; i<(dat1.length-skipLast-skipFirst); i++){
+            data[0].data[i] = [(i+skipFirst)*0.025, dat1[i+skipFirst] - begin1];
+            data[1].data[i] = [(i+skipFirst)*0.025, dat2[i+skipFirst] - begin2];
+        }
+        $.plot(graph, data, options);
+    };
+
+    var MyPlot4 = function(tx1, dat1, tx2, dat2, tx3, dat3, tx4, dat4){
+        graph.width(800).height(600);
+        var data =[
+            { label: tx1, data: [ ] },
+            { label: tx2, data: [ ]},
+            { label: tx3, data: [ ] },
+            { label: tx4, data: [ ]}
+        ];
+        var begin1 = zeroStart ? dat1[0] : 0;
+        var begin2 = zeroStart ? dat2[0] : 0;
+        var begin3 = zeroStart ? dat3[0] : 0;
+        var begin4 = zeroStart ? dat4[0] : 0;
+
+        for(var i=0; i<(dat1.length-skipLast-skipFirst); i++){
+            data[0].data[i] = [(i+skipFirst)*0.025, dat1[i+skipFirst] - begin1];
+            data[1].data[i] = [(i+skipFirst)*0.025, dat2[i+skipFirst] - begin1];
+            data[2].data[i] = [(i+skipFirst)*0.025, dat3[i+skipFirst] - begin1];
+            data[3].data[i] = [(i+skipFirst)*0.025, dat4[i+skipFirst] - begin1];
+        }
+        $.plot(graph, data, options);
+    };
+
+
+    var MyPlotDiff = function(tx1, dat1, dat2){
+        graph.width(800).height(600);
+        var data =[
+            { label: tx1, data: [ ] }
+        ];
+        var begin1 = zeroStart ? dat1[0] : 0;
+        var begin2 = zeroStart ? dat2[0] : 0;
+
+        for(var i=0; i<(dat1.length-skipLast-skipFirst); i++){
+            data[0].data[i] = [(i+skipFirst)*0.025, dat1[(i+skipFirst)] - begin1 - (dat2[(i+skipFirst)] - begin2)];
+        }
+        $.plot(graph, data, options);
+    };
+
+
+    var PlotPos = function(){
+        MyPlot2("Позиция", curData, "Генератор", curTraj);
+        cbPing();
+    };
+
+
+    var currentPlot = PlotPos;
+
+
+    var PlotSpeedDiff = function() {
+        MyPlot4(
+            "Скорость", curSpeed,
+            "Генератор", curSpeedT,
+            "ОСкор", oldSpeed,
+            "ОГен",  oldSpeedT
+        );
         cbPing();
     };
 
     var PlotSpeed = function(){
-        graph.width(619).height(400);
-        var data =[
-            { label: "Позиция", data: [  ] }
-        ];
-        var pred = curData[0];
-        data[0].data[0] = 0;
-        for(var i=1; i<curData.length; i++){
-            var speed = (curData[i] - pred)/0.025;
-            data[0].data[i] = [i, speed];
-            pred = curData[i];
-        }
-        $.plot(graph, data, options);
+        MyPlot2("Скорость", curSpeed, "Генератор", curSpeedT);
         cbPing();
     };
 
-    var addButton = function(text,cb){
-        var li = $('<li>');
-            $('<button>').text(text).appendTo(li).on('click', cb);
-        li.appendTo(ul);
+
+    var PlotAccel = function(){
+        MyPlot2("Ускорение", curAccel, "Генератор", curAccelT);
+        cbPing();
     };
 
-    addButton('ВСЁ', cbPing);
-    addButton('Поехать', DriveGO);
-    addButton('с FTP-пить', GetFTP);
-    addButton('Постоить', PlotGraph);
-    addButton('Позиция', PlotPos);
-    addButton('Скорость', PlotSpeed);
-    addButton('Ускорение', cbPing);
-    addButton('Ошибка', cbPing);
-    addButton('Управление', cbPing);
+    var PlotErrPos = function(){
+        MyPlotDiff("Ошибка",curTraj , curData);
+        cbPing();
+    };
+
+    var PlotUst = function(){
+        MyPlot1("Уставка", curUst);
+        cbPing();
+    };
+
+    // ADD BUTTON
+    var addButton = function(text,cb){
+        var li = $('<li>');
+        var btn = $('<button>').text(text).appendTo(li).on('click', cb);
+        li.appendTo(ul);
+        return btn;
+    };
+
+    var radioPos = function(){
+        currentPlot = PlotPos;
+        currentPlot();
+    };
+
+    var radioSpeed = function(){
+        // append goes here
+        currentPlot = PlotSpeed;
+        currentPlot();
+    };
+
+    var radioAccel = function(){
+        currentPlot = PlotAccel;
+        currentPlot();
+    };
+
+
+    var addRadio = function(text, group, cb){
+        var li = $('<li>');
+        var btn = $('<input>').attr('type','radio').attr("name",group).appendTo(li).on('click',
+        function() {
+            if($(this).val() == 'on'){
+                cb();
+            }
+        });
+        li.append(text);
+        li.appendTo(ul);
+        return btn;
+    };
+
+    var allBtn = addButton('ВСЁ', DoAll);
+
+    var goBtn = addButton('Поехать', DriveGO);
+    var ftpBtn = addButton('с FTP-пить', GetFTP);
+    var plotBtn = addButton('Постоить', PlotGraph);
+
+    addRadio('Позиция', 'group1', radioPos);
+    addRadio('Скорость', 'group1', radioSpeed);
+    addRadio('Ускорение', 'group1', radioAccel);
+
+    addButton('Ошибка', PlotErrPos);
+    addButton('Управление', PlotUst);
+
+    addButton('Разница', PlotSpeedDiff);
+
+    addButton('Повторяемость', function() {
+        MyPlotDiff("ГенТек-Пред", curData,oldData);
+        cbPing();
+    });
+
+
     ul.appendTo(pp);
+    var div = $('<div>');
+    div.appendTo(pp);
+    new showEditPParams(div);
     graph.appendTo(pp);
 }

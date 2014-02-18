@@ -25,16 +25,23 @@ eventBus.registerHandler('ftp.load', function(args, responder){
     ftpTelemetry.loadTelemetry(java.lang.Integer(7));
 
     var vals = ftpTelemetry.getSensVal();
-    console.log(vals);
-    console.log(vals.size());
+    var trajv = ftpTelemetry.getTrgenVal();
+    var ustv   = ftpTelemetry.getRegVal();
+
     var telem = [];
+    var traj = [];
+    var ust = [];
     for(var i=0; i<vals.size(); i++){
         telem[i] = vals.get(i);
+        traj[i] = trajv.get(i);
+        ust[i] = ustv.get(i);
     }
 
     responder({
         status: 'ok',
-        data: telem
+        data: telem,
+        traj: traj,
+        ust: ust
     });
 
 });

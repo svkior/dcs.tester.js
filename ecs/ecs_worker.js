@@ -35,21 +35,24 @@ var v = Packages.ru.scircus.mech.UDPWorker;
 
 console.log(v);
 
-var UDPWorker1 = new v("192.168.100.198");
+var UDPWorker1 = new v("192.168.100.98");
 
 
 eventBus.registerHandler('ecs.go', function(args, responder){
 
-    var driveNumber = java.lang.Integer(7);
-    var groupNumber = java.lang.Integer(4);
-    var delayTime = java.lang.Integer(7000);
+
+    var oneWay = args.oneWay;
+
+    var driveNumber = java.lang.Integer(args.DriveID);
+    var groupNumber = java.lang.Integer(args.DriveGroup);
+    var delayTime = java.lang.Integer(args.delayTime);
 
     var zero = java.lang.Integer(0);
 
-    var maxL = java.lang.Integer(1000);
-    var mmaxL = java.lang.Integer(-1000);
-    var maxV = java.lang.Integer(200);
-    var maxA = java.lang.Integer(200);
+    var maxL = java.lang.Integer(args.L);
+    var mmaxL = java.lang.Integer(-args.L);
+    var maxV = java.lang.Integer(args.V);
+    var maxA = java.lang.Integer(args.A);
     var maxSpeed = java.lang.Integer(1000);
 
     UDPWorker1.SendPacket(2000,[driveNumber, zero]); //Перезаливка параметров в привод
@@ -62,15 +65,21 @@ eventBus.registerHandler('ecs.go', function(args, responder){
         console.log('Going UP ...');
         UDPWorker1.SendPacket(330,[maxV,maxA,maxL,groupNumber]); // Движение V/1000, A/1000, L/1000
         UDPWorker1.SendPacket(313,[maxSpeed]);
-        vertx.setTimer(16000, function() {
-            console.log('Going DOWN ...');
-            UDPWorker1.SendPacket(330,[maxV,maxA,mmaxL,groupNumber]); // Движение V/1000, A/1000, L/1000
-            UDPWorker1.SendPacket(313,[maxSpeed]);
-            vertx.setTimer(16000, function() {
+        vertx.setTimer(delayTime, function() {
+            if(oneWay){
                 console.log('STOP');
                 UDPWorker1.SendPacket(324,[groupNumber]); // Выключение питания привода
                 responder({status: 'ok'});
-            });
+            } else {
+                console.log('Going DOWN ...');
+                UDPWorker1.SendPacket(330,[maxV,maxA,mmaxL,groupNumber]); // Движение V/1000, A/1000, L/1000
+                UDPWorker1.SendPacket(313,[maxSpeed]);
+                vertx.setTimer(delayTime, function() {
+                    console.log('STOP');
+                    UDPWorker1.SendPacket(324,[groupNumber]); // Выключение питания привода
+                    responder({status: 'ok'});
+                });
+            }
         });
     });
     console.log('YOHOHO!');
