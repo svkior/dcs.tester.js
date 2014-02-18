@@ -20,7 +20,14 @@ container.deployModule('io.vertx~mod-web-server~2.0.0-final', {
         { address: 'ubtests.delete' },
         { address: 'ubtests.find' },
         { address: 'ubtests.run'},
-        { address: 'ubtests.getports'}
+        { address: 'ubtests.getports'},
+        { address: 'dataserver.login'},
+        { address: 'dataserver.logout'},
+        { address: 'dataserver.getservers'},
+        { address: 'dataserver.getgroups'},
+        { address: 'dataserver.getdriveparam'},
+        { address: 'datasever.driveparameterupdate'},
+        { address: 'ecs.go'}
     ]
 });
 container.deployModule("io.vertx~mod-mongo-persistor~2.0.0-final",{
@@ -29,3 +36,5 @@ container.deployModule("io.vertx~mod-mongo-persistor~2.0.0-final",{
 });
 
 container.deployVerticle('uboot_test2.js');
+container.deployVerticle('ecs/mysql_dataserver.js');
+container.deployVerticle('ecs/ecs_worker.js');
