@@ -29,23 +29,32 @@ function SendUDPPacket(cmd, params){
 
 }
 
+var v = Packages.ru.scircus.mech.UDPWorker;
+
+console.log(v);
+
+var UDPWorker1 = new v("192.168.100.98");
+
 
 eventBus.registerHandler('ecs.go', function(args, responder){
 
-    var driveNumber = 7;
-    var groupNumber = 4;
-    var delayTime = 7000;
+    var driveNumber = java.lang.Integer(7);
+    var groupNumber = java.lang.Integer(4);
+    var delayTime = java.lang.Integer(7000);
 
-    var maxL = 1000;
-    var maxV = 200;
-    var maxA = 200;
-    SendUDPPacket(2000,[driveNumber, 0]); //Перезаливка параметров в привод
-    SendUDPPacket(320,[0,0]); // Активация Общего ручного режима
-    SendUDPPacket(321,[groupNumber]);   // Ввод в группу привода
-    SendUDPPacket(510,[groupNumber]);  // Активировать привод
-    SendUDPPacket(312, [groupNumber]);
-    SendUDPPacket(330,[maxV,maxA,maxL,groupNumber]); // Движение V/1000, A/1000, L/1000
-    SendUDPPacket(313,[1000]);
+    var zero = java.lang.Integer(0);
+
+    var maxL = java.lang.Integer(1000);
+    var maxV = java.lang.Integer(200);
+    var maxA = java.lang.Integer(200);
+    var maxSpeed = java.lang.Integer(1000);
+
+    UDPWorker1.SendPacket(2000,[driveNumber, zero]); //Перезаливка параметров в привод
+    UDPWorker1.SendPacket(320,[zero,zero]); // Активация Общего ручного режима
+    UDPWorker1.SendPacket(321,[groupNumber]);   // Ввод в группу привода
+    UDPWorker1.SendPacket(510,[groupNumber]);  // Активировать привод
+    UDPWorker1.SendPacket(312, [groupNumber]);
+    UDPWorker1.SendPacket(330,[maxV,maxA,maxL,groupNumber]); // Движение V/1000, A/1000, L/1000
+    UDPWorker1.SendPacket(313,[maxSpeed]);
     console.log('YOHOHO!');
 });
-
