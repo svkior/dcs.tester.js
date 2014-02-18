@@ -105,6 +105,7 @@ exports.getUboot = function(iPortName, cmds, rcb) {
                         console.log("Already at U-Boot");
                         uboot.sp.writeString("\n");
                         uboot.state_m = 'wait_prompt';
+                        uboot.resp = ''
                     } else if(strr.search("gin:")>0) {
                         // Got Prompt like Login:
                         // We @ login:
@@ -115,6 +116,7 @@ exports.getUboot = function(iPortName, cmds, rcb) {
                         // GOT # prompt
                         uboot.sp.writeString("reboot\n");
                         uboot.state_m = 'boot';
+                        uboot.resp = ''
                     } else if(strr.search("sword:")>0){
                         uboot.sp.writeString('1\n');
 
@@ -125,6 +127,7 @@ exports.getUboot = function(iPortName, cmds, rcb) {
                         // GOT # prompt
                         uboot.sp.writeString("reboot\n");
                         uboot.state_m = 'boot';
+                        uboot.resp = ''
                     }
                     break;
                 case 'boot':
