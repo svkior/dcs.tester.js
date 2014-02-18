@@ -45,8 +45,6 @@ ul {
 .pp{
     float:left;
     width: auto;
-    border: 4px double black; /* Параметры границы */
-    background: #71b9ff; /* Цвет фона */
     padding: 0; /* Поля вокруг текста */
     margin: 0;
 }

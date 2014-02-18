@@ -12,7 +12,7 @@ console.log('Launching dcs_tester');
 var container = require('vertx/container');
 container.deployModule('io.vertx~mod-web-server~2.0.0-final', {
     port: 8080,
-    host: "localhost",
+    host: "0.0.0.0",
     bridge: true,
     inbound_permitted: [
         { address: 'ubtests.list' },
@@ -27,7 +27,9 @@ container.deployModule('io.vertx~mod-web-server~2.0.0-final', {
         { address: 'dataserver.getgroups'},
         { address: 'dataserver.getdriveparam'},
         { address: 'datasever.driveparameterupdate'},
-        { address: 'ecs.go'}
+        { address: 'ecs.go'},
+        { address: 'ftp.update'},
+        { address: 'ftp.load'}
     ]
 });
 container.deployModule("io.vertx~mod-mongo-persistor~2.0.0-final",{
@@ -38,3 +40,4 @@ container.deployModule("io.vertx~mod-mongo-persistor~2.0.0-final",{
 container.deployVerticle('uboot_test2.js');
 container.deployVerticle('ecs/mysql_dataserver.js');
 container.deployVerticle('ecs/ecs_worker.js');
+container.deployVerticle('ecs/ftp_worker.js');

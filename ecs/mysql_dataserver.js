@@ -5,7 +5,6 @@ var console = require('vertx/console');
 
 console.log('Mysql Dataserver Vertex launched');
 
-var container = require('vertx/container');
 var eventBus = require('vertx/event_bus');
 
 eventBus.registerHandler('dataserver.getservers', function(args, responder){
