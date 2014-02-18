@@ -35,7 +35,7 @@ var v = Packages.ru.scircus.mech.UDPWorker;
 
 console.log(v);
 
-var UDPWorker1 = new v("192.168.99.241");
+var UDPWorker1 = new v("192.168.100.198");
 
 
 eventBus.registerHandler('ecs.go', function(args, responder){

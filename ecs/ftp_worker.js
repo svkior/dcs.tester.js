@@ -7,7 +7,7 @@ var eventBus = require('vertx/event_bus');
 
 var FtpWorker = Packages.ru.scircus.mech.GetFTPTelemetry;
 
-var ftpTelemetry = new FtpWorker("192.168.99.241");
+var ftpTelemetry = new FtpWorker("192.168.100.98");
 
 eventBus.registerHandler('ftp.update', function(args, responder){
 
