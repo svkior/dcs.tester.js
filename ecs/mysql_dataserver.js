@@ -12,19 +12,19 @@ eventBus.registerHandler('dataserver.getservers', function(args, responder){
        data:[
            {
                ip: '127.0.0.1',
-               hame: 'Localhost'
+               name: 'Локальный Сервер'
            },
            {
-               ip: "10.211.55.6",
-               name: 'Virtual Linux'
+               ip: "192.168.3.2",
+               name: 'ECS Мастер на объекте'
            },
            {
                ip: "192.168.100.98",
-               name: 'Orel Server'
+               name: 'Орловский Сервер VPN'
            },
            {
                ip: "192.168.99.241",
-               name: 'Orel Server from inside'
+               name: 'Орловский Сервер'
            }
        ]
    })
