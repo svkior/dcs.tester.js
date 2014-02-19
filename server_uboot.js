@@ -31,7 +31,8 @@ container.deployModule('io.vertx~mod-web-server~2.0.0-final', {
         { address: 'ecs.login'},
         { address: 'ftp.login'},
         { address: 'ftp.update'},
-        { address: 'ftp.load'}
+        { address: 'ftp.load'},
+        { address: 'server.reboot'}
     ]
 });
 container.deployModule("io.vertx~mod-mongo-persistor~2.0.0-final",{
@@ -43,3 +44,11 @@ container.deployVerticle('uboot_test2.js');
 container.deployVerticle('ecs/mysql_dataserver.js');
 container.deployVerticle('ecs/ecs_worker.js');
 container.deployVerticle('ecs/ftp_worker.js');
+
+var eventBus = require('vertx/event_bus');
+
+eventBus.registerHandler('server.reboot', function(args, responder){
+    responder({status: "ok"});
+    console.log('System is going to shutdown now!!!');
+    container.exit();
+});
