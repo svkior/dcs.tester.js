@@ -13,7 +13,7 @@ if(!channel){
     channel = Packages.java.nio.channels.DatagramChannel.open();
     channel.socket().bind(Packages.java.net.InetSocketAddress(1701));
 }
-var ecsAddr = Packages.java.net.InetSocketAddress("192.168.100.98", 1350);
+var ecsAddr = Packages.java.net.InetSocketAddress("192.168.99.241", 1350);
 
 function SendUDPPacket(cmd, params){
     var parLen = params.length;
@@ -33,15 +33,17 @@ function SendUDPPacket(cmd, params){
 
 var v = Packages.ru.scircus.mech.UDPWorker;
 
-console.log(v);
+var UDPWorker1 = undefined;
 
-var UDPWorker1 = new v("192.168.100.98");
-
+eventBus.registerHandler('ecs.login', function(args, responder){
+    UDPWorker1 = new v(args.ip);
+});
 
 eventBus.registerHandler('ecs.go', function(args, responder){
 
 
     var oneWay = args.oneWay;
+    var powerOff = args.powerOff;
 
     var driveNumber = java.lang.Integer(args.DriveID);
     var groupNumber = java.lang.Integer(args.DriveGroup);
@@ -60,7 +62,9 @@ eventBus.registerHandler('ecs.go', function(args, responder){
     UDPWorker1.SendPacket(321,[groupNumber]);   // Ввод в группу привода
     UDPWorker1.SendPacket(510,[groupNumber]);  // Активировать привод
     UDPWorker1.SendPacket(312, [groupNumber]);
-    UDPWorker1.SendPacket(504,[zero, groupNumber]); // Сброс позиции в 0
+    UDPWorker1.SendPacket(503,[groupNumber,zero]); // Сброс позиции в 0
+    // NOT WORK
+    //UDPWorker1.SendPacket(504,[zero, groupNumber]); // Сброс позиции в 0
     vertx.setTimer(2000, function(){
         console.log('Going UP ...');
         UDPWorker1.SendPacket(330,[maxV,maxA,maxL,groupNumber]); // Движение V/1000, A/1000, L/1000
@@ -68,7 +72,9 @@ eventBus.registerHandler('ecs.go', function(args, responder){
         vertx.setTimer(delayTime, function() {
             if(oneWay){
                 console.log('STOP');
-                UDPWorker1.SendPacket(324,[groupNumber]); // Выключение питания привода
+                if(powerOff){
+                    UDPWorker1.SendPacket(324,[groupNumber]); // Выключение питания привода
+                }
                 responder({status: 'ok'});
             } else {
                 console.log('Going DOWN ...');
@@ -76,7 +82,9 @@ eventBus.registerHandler('ecs.go', function(args, responder){
                 UDPWorker1.SendPacket(313,[maxSpeed]);
                 vertx.setTimer(delayTime, function() {
                     console.log('STOP');
-                    UDPWorker1.SendPacket(324,[groupNumber]); // Выключение питания привода
+                    if(powerOff){
+                        UDPWorker1.SendPacket(324,[groupNumber]); // Выключение питания привода
+                    }
                     responder({status: 'ok'});
                 });
             }

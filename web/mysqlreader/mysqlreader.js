@@ -3,6 +3,12 @@ function MysqlReader(server, eventBus){
     ed.empty();
     var status = $('<strong>').text('Connecting to ' + server.ip);
     status.appendTo(ed);
+    eventBus.send('ecs.login', {ip:server.ip}, function(resp){
+        console.log('ECS connected to : ' + server.ip);
+    });
+    eventBus.send('ftp.login', {ip:server.ip}, function(resp){
+        console.log('ECS connected to : ' + server.ip);
+    });
     eventBus.send('dataserver.login',{ip:server.ip}, function(resp){
         console.log('server opened');
         status.text('Connected to ' + server.ip);

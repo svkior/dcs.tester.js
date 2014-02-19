@@ -13,14 +13,12 @@ function showDriveParams(DriveID, DriveName, eventBus){
                     console.log('TRY TO EDIT ' + id);
                     var nameInput = $('[name=' + id + ']', this);
                     nameInput.prop('readonly', true);
-                    //TODO: MAKE NOT EDITABLE
                     eventBus.send('datasever.driveparameterupdate',{
                         DriveID: DriveID,
                         param: id,
                         value: nameInput.val()
                     }, function(resp){
                         console.log(resp);
-                        //TODO: MAKE EDITABLE
                         nameInput.prop('readonly', false);
                     });
                     return false;
@@ -39,6 +37,8 @@ function showDriveParams(DriveID, DriveName, eventBus){
             addToList('Подставка', 'D5', values.D5);
             addToList('РучнойР', 'D12', values.D12);
             addToList('Ппрям', 'D22', values.D22);
+            addToList('ОткрТ', 'D20', values.D20);
+            addToList('ПодТ', 'D16', values.D16);
             addToList('Доезд 5с', 'D4', values.D4);
             addToList('Min ', 'D10', values.D10);
             addToList('Max', 'D11', values.D11);

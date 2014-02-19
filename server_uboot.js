@@ -15,10 +15,10 @@ container.deployModule('io.vertx~mod-web-server~2.0.0-final', {
     host: "0.0.0.0",
     bridge: true,
     inbound_permitted: [
-        { address: 'ubtests.list' },
-        { address: 'ubtests.save' },
-        { address: 'ubtests.delete' },
-        { address: 'ubtests.find' },
+        { address: 'ubtests.list'},
+        { address: 'ubtests.save'},
+        { address: 'ubtests.delete'},
+        { address: 'ubtests.find'},
         { address: 'ubtests.run'},
         { address: 'ubtests.getports'},
         { address: 'dataserver.login'},
@@ -28,6 +28,8 @@ container.deployModule('io.vertx~mod-web-server~2.0.0-final', {
         { address: 'dataserver.getdriveparam'},
         { address: 'datasever.driveparameterupdate'},
         { address: 'ecs.go'},
+        { address: 'ecs.login'},
+        { address: 'ftp.login'},
         { address: 'ftp.update'},
         { address: 'ftp.load'}
     ]

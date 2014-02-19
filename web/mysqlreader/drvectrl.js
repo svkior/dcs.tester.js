@@ -18,6 +18,11 @@ function showDriveCtrl(DriveID, DriveName, eventBus){
     var oldAccel = [];
     var oldAccelT = [];
 
+    function isFunction(functionToCheck) {
+        var getType = {};
+        return functionToCheck && getType.toString.call(functionToCheck) === '[object Function]';
+    }
+
     var options = {
         series: {
             lines: { show: true },
@@ -39,11 +44,12 @@ function showDriveCtrl(DriveID, DriveName, eventBus){
             L: L,
             V: V,
             A: A,
-            oneWay: oneWay
+            oneWay: oneWay,
+            powerOff: false // TODO: Passthrough it to UI
         }, function(res){
             console.log('GOT RESPAWN!');
             goBtn.removeAttr('disabled');
-            if(cb){
+            if(isFunction(cb)){
                 cb();
             }
         });
@@ -56,7 +62,7 @@ function showDriveCtrl(DriveID, DriveName, eventBus){
         eventBus.send('ftp.update',{}, function(res){
             console.log(res);
             ftpBtn.removeAttr('disabled');
-            if(cb){
+            if(isFunction(cb)){
                 cb();
             }
         });
@@ -96,7 +102,7 @@ function showDriveCtrl(DriveID, DriveName, eventBus){
             }
             currentPlot();
             plotBtn.removeAttr('disabled');
-            if(cb){
+            if(isFunction(cb)){
                 cb();
             }
         });
@@ -109,17 +115,20 @@ function showDriveCtrl(DriveID, DriveName, eventBus){
         plotBtn.attr('disabled','disabled');
         goBtn.attr('disabled','disabled');
 
-        DriveGO(
-            function(){
-                GetFTP(
-                    function(){
-                        PlotGraph(function(){
-                            allBtn.removeAttr('disabled');
-                        });
-                    }
-                );
-            }
-        );
+        GetFTP( function(){
+            ftpBtn.attr('disabled','disabled');
+            DriveGO(
+                function(){
+                    GetFTP(
+                        function(){
+                            PlotGraph(function(){
+                                allBtn.removeAttr('disabled');
+                            });
+                        }
+                    );
+                }
+            );
+        });
         return false;
     };
 
@@ -270,23 +279,27 @@ function showDriveCtrl(DriveID, DriveName, eventBus){
 
     var allBtn = addButton('ВСЁ', DoAll);
 
-    var goBtn = addButton('Поехать', DriveGO);
-    var ftpBtn = addButton('с FTP-пить', GetFTP);
-    var plotBtn = addButton('Постоить', PlotGraph);
+    var goBtn = addButton('ECS', DriveGO);
+    var ftpBtn = addButton('FTPGet', GetFTP);
+    var plotBtn = addButton('Plot', PlotGraph);
 
-    addRadio('Позиция', 'group1', radioPos);
-    addRadio('Скорость', 'group1', radioSpeed);
-    addRadio('Ускорение', 'group1', radioAccel);
+    addRadio('Поз', 'group1', radioPos);
+    addRadio('Ск', 'group1', radioSpeed);
+    addRadio('Уск', 'group1', radioAccel);
 
     addButton('Ошибка', PlotErrPos);
-    addButton('Управление', PlotUst);
+    addButton('Упр', PlotUst);
 
-    addButton('Разница', PlotSpeedDiff);
+    addButton('Разн', PlotSpeedDiff);
 
-    addButton('Повторяемость', function() {
+    addButton('Повтор', function() {
         MyPlotDiff("ГенТек-Пред", curData,oldData);
         cbPing();
     });
+    addButton('УпрСк', function() {
+        MyPlot2("Упр", curUst, "Скор", curSpeed);
+    });
+
 
 
     ul.appendTo(pp);
