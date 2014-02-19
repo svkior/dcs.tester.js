@@ -12,14 +12,19 @@ var refreshServers = function(){
         $('.params').empty();
         $('.pp').empty();
 
-        var rld = $('.reloader');
-        rld.unbind("click");
-        rld.on("click",function(){
-            console.log('Clicked');
-            eb.send('server.reboot',{}, function(){
-                console.log('Reboot Request Sended!');
-            });
-            return false;
+        eb.send('server.getver', {}, function(resp){
+            var rld = $('.reloader');
+            rld.empty();
+            rld.text('Текущая версия от ' + resp.version + '  ');
+
+            $('<a>').attr('href','#').text('ОБНОВИТЬ').on("click",function(){
+                console.log('Clicked');
+                eb.send('server.reboot',{}, function(){
+                    console.log('Reboot Request Sended!');
+                });
+                return false;
+            }).appendTo(rld);
+
         });
 
 

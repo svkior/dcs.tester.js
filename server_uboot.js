@@ -7,9 +7,16 @@ Libc.printf("Hello %s, from printf", "World")
 */
 
 var console  = require('vertx/console');
-console.log('Launching dcs_tester');
 
 var container = require('vertx/container');
+
+var config = container.config;
+console.log(config);
+var ubootVersion = config.ubootVersion;
+
+console.log('Launching Server ' + ubootVersion);
+
+
 container.deployModule('io.vertx~mod-web-server~2.0.0-final', {
     port: 8080,
     host: "0.0.0.0",
@@ -32,7 +39,8 @@ container.deployModule('io.vertx~mod-web-server~2.0.0-final', {
         { address: 'ftp.login'},
         { address: 'ftp.update'},
         { address: 'ftp.load'},
-        { address: 'server.reboot'}
+        { address: 'server.reboot'},
+        { address: 'server.getver'}
     ]
 });
 container.deployModule("io.vertx~mod-mongo-persistor~2.0.0-final",{
@@ -46,6 +54,10 @@ container.deployVerticle('ecs/ecs_worker.js');
 container.deployVerticle('ecs/ftp_worker.js');
 
 var eventBus = require('vertx/event_bus');
+
+eventBus.registerHandler('server.getver', function(args, responder){
+  responder({version: ubootVersion});
+});
 
 eventBus.registerHandler('server.reboot', function(args, responder){
     responder({status: "ok"});
