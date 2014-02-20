@@ -27,8 +27,6 @@ var refreshServers = function(){
 
         });
 
-
-
         var renderListItem = function(server){
             var li = $('<li>');
             var openServer = function(){
@@ -86,5 +84,3 @@ var idx = 0;
     }
     setTimeout(worker, 5000);
 })();
-
-

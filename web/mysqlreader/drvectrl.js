@@ -360,8 +360,13 @@ function showDriveCtrl(DriveID, DriveName, DriveGroup, Addr, Bus, eventBus){
         MyPlotDiff("ГенТек-Пред", curData,oldData);
         cbPing();
     });
+
     addButton('УпрСк', function() {
         MyPlot2Axis("Упр", curUst, "Скор", curSpeed);
+    });
+
+    addButton('УпрПол', function() {
+        MyPlot2Axis("Упр", curUst, "Пол", curData);
     });
 
 
