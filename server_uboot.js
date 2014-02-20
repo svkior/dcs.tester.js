@@ -34,6 +34,7 @@ container.deployModule('io.vertx~mod-web-server~2.0.0-final', {
         { address: 'dataserver.getgroups'},
         { address: 'dataserver.getdriveparam'},
         { address: 'datasever.driveparameterupdate'},
+        { address: 'dataserver.getconnection'},
         { address: 'ecs.go'},
         { address: 'ecs.login'},
         { address: 'ftp.login'},

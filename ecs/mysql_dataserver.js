@@ -146,3 +146,14 @@ eventBus.registerHandler('datasever.driveparameterupdate', function(args, respon
         });
     });
 });
+
+eventBus.registerHandler('dataserver.getconnection', function(args, responder){
+    var DriveID = args.DriveID;
+    executeMysql("select c.param from connections c, drives d where d.id = " + DriveID + " and d.connectionID=c.id",
+    function(data){
+        responder({
+            status: 'ok',
+            data: data
+        })
+    });
+});

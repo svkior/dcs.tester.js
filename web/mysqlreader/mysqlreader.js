@@ -31,15 +31,24 @@ function MysqlReader(server, eventBus){
             $.each(response.data, function(){
                 if(this.DriveID){
                     var DriveID = this.DriveID;
+                    var DriveGroup = this.ID;
                     var DriveName = this.Comment;
-                    var showParams = function(){
-                        new showDriveParams(DriveID, DriveName, eventBus);
-                        new showDriveCtrl(DriveID, DriveName, eventBus);
-                        return false;
-                    };
-                    var li = $('<li>').text(this.ID + '(' + this.DriveID + ')' + ' - ');
-                    $('<a>').text(this.Comment).attr('href','#').on('click', showParams).appendTo(li);
-                    li.appendTo(ul);
+                    eventBus.send('dataserver.getconnection', {DriveID:DriveID}, function(res){
+                        console.log('!!!!!!!!');
+                        console.log(res.data[0]);
+                        var Addr = res.data[0].Param & 0xff;
+                        var Bus = res.data[0].Param >>> 16;
+
+                        var showParams = function(){
+                            new showDriveParams(DriveID, DriveName, eventBus);
+                            new showDriveCtrl(DriveID, DriveName, DriveGroup, Addr, Bus, eventBus);
+                            return false;
+                        };
+
+                        var li = $('<li>').text(DriveGroup + '(' + DriveID + ' (B:' + Bus +',A:' + Addr + ')'  + ' - ');
+                        $('<a>').text(DriveName).attr('href','#').on('click', showParams).appendTo(li);
+                        li.appendTo(ul);
+                    });
                 }
             })
         });

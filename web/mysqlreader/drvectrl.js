@@ -1,4 +1,4 @@
-function showDriveCtrl(DriveID, DriveName, eventBus){
+function showDriveCtrl(DriveID, DriveName, DriveGroup, Addr, Bus, eventBus){
 
     console.log('Drive Controls');
     var pp = $('.pp');
@@ -39,7 +39,7 @@ function showDriveCtrl(DriveID, DriveName, eventBus){
         goBtn.attr('disabled','disabled');
         eventBus.send('ecs.go',{
             DriveID:DriveID,
-            DriveGroup:4,
+            DriveGroup:DriveGroup,
             delayTime: delayTime,
             L: L,
             V: V,
@@ -59,7 +59,11 @@ function showDriveCtrl(DriveID, DriveName, eventBus){
     var GetFTP = function(cb){
         console.log('Get FTP');
         ftpBtn.attr('disabled','disabled');
-        eventBus.send('ftp.update',{}, function(res){
+        eventBus.send('ftp.update',{
+            DriveID:DriveID,
+            Bus:Bus,
+            Addr:Addr
+        }, function(res){
             console.log(res);
             ftpBtn.removeAttr('disabled');
             if(isFunction(cb)){

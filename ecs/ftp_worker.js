@@ -18,11 +18,12 @@ eventBus.registerHandler('ftp.login', function(args, responder){
 
 eventBus.registerHandler('ftp.update', function(args, responder){
 
+
     ftpTelemetry.updateTelemetry(
-        java.lang.Integer(7), // Drive Number
-        java.lang.Integer(2),
-        java.lang.Integer(0)
-    ); // ToDo: fix drive number
+        java.lang.Integer(args.DriveID), // Drive Number
+        java.lang.Integer(args.Bus),
+        java.lang.Integer(args.Addr)
+    );
 
     responder({status: 'ok'});
 });
