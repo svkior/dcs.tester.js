@@ -5,6 +5,7 @@ function showDriveCtrl(DriveID, DriveName, DriveGroup, Addr, Bus, eventBus){
     pp.empty();
     var ul = $('<ul>');
     var graph = $('<div>');
+    var graph2 = $('<div>');
     var curData = [];
     var curTraj = [];
     var curSpeed = [];
@@ -76,7 +77,11 @@ function showDriveCtrl(DriveID, DriveName, DriveGroup, Addr, Bus, eventBus){
     var PlotGraph = function(cb) {
         plotBtn.attr('disabled','disabled');
         console.log('Plot Graph');
-        eventBus.send('ftp.load', {}, function(res){
+        eventBus.send('ftp.load', {
+            DriveID:DriveID,
+            Bus:Bus,
+            Addr:Addr
+        }, function(res){
            console.log(res);
 
             oldData = curData;

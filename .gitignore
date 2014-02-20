@@ -3,4 +3,5 @@ nohup.out
 mods/*
 temp*
 config.json
+working/*
 
