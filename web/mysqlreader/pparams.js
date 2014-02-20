@@ -14,8 +14,9 @@ skipFirst = 0;
 function showEditPParams(div){
 
     var ul = $('<ul>');
+    var ul2 = $('<ul>');
 
-    var addLI = function(text, iVal, cb){
+    var addLI = function(ul, text, iVal, cb){
         var li = $('<li>').text(text + " : ");
         var inp = $('<input>');
         inp.val(iVal).addClass('edit').on('change', function(){
@@ -26,7 +27,7 @@ function showEditPParams(div){
         return inp;
     };
 
-    var addLIchkb = function(text, iVal, cb){
+    var addLIchkb = function(ul,text, iVal, cb){
         var li = $('<li>').text(text + " : ");
         var inp = $('<input>').attr('type', 'checkbox');
         if(iVal){
@@ -58,17 +59,18 @@ function showEditPParams(div){
         delayTime = newTime * 1000;
     };
 
-    addLIchkb("OWay", oneWay, function(val){ oneWay = val});
-    addLI('L',L/1000, function(val){ L = val*1000; updateDt();});
-    addLI('V',V/1000, function(val){ V = val*1000; updateDt();});
-    addLI('A',A/1000, function(val){ A = val*1000; updateDt();});
-    addLI('Last',skipLast*0.025,function(val){ skipLast = Math.round(val/0.025)});
-    addLI('First',skipFirst*0.025,function(val){ skipFirst = Math.round(val/0.025)});
-    addLIchkb("Совм", zeroStart, function(val){ zeroStart = val});
-    addLIchkb("ВЫКЛ", powerOff, function(val){ powerOff = val});
-    addLIchkb("DOT", drawDots, function(val){
+    addLIchkb(ul,"OWay", oneWay, function(val){ oneWay = val});
+    addLI(ul,'L',L/1000, function(val){ L = val*1000; updateDt();});
+    addLI(ul,'V',V/1000, function(val){ V = val*1000; updateDt();});
+    addLI(ul,'A',A/1000, function(val){ A = val*1000; updateDt();});
+    addLI(ul2,'First',skipFirst*0.025,function(val){ skipFirst = Math.round(val/0.025)});
+    addLI(ul2,'Last',skipLast*0.025,function(val){ skipLast = Math.round(val/0.025)});
+    addLIchkb(ul2,"Совм", zeroStart, function(val){ zeroStart = val});
+    addLIchkb(ul2,"ВЫКЛ", powerOff, function(val){ powerOff = val});
+    addLIchkb(ul2,"DOT", drawDots, function(val){
         drawDots = val;
     });
     ul.appendTo(div);
+    ul2.appendTo(div);
     updateDt();
 }

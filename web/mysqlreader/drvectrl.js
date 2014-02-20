@@ -138,6 +138,7 @@ function showDriveCtrl(DriveID, DriveName, DriveGroup, Addr, Bus, eventBus){
 
     var MyPlot1 = function(tx1, dat1){
         graph.width(800).height(600);
+        graph2.empty();
         var options = {
             series: {
                 lines: { show: true },
@@ -158,6 +159,7 @@ function showDriveCtrl(DriveID, DriveName, DriveGroup, Addr, Bus, eventBus){
 
     var MyPlot2 = function(tx1, dat1, tx2, dat2){
         graph.width(800).height(600);
+        graph2.empty();
         var options = {
             series: {
                 lines: { show: true },
@@ -181,6 +183,7 @@ function showDriveCtrl(DriveID, DriveName, DriveGroup, Addr, Bus, eventBus){
 
     var MyPlot4 = function(tx1, dat1, tx2, dat2, tx3, dat3, tx4, dat4){
         graph.width(800).height(600);
+        graph2.empty();
         var options = {
             series: {
                 lines: { show: true },
@@ -211,6 +214,7 @@ function showDriveCtrl(DriveID, DriveName, DriveGroup, Addr, Bus, eventBus){
 
     var MyPlotDiff = function(tx1, dat1, dat2){
         graph.width(800).height(600);
+        graph2.empty();
         var options = {
             series: {
                 lines: { show: true },
@@ -229,6 +233,34 @@ function showDriveCtrl(DriveID, DriveName, DriveGroup, Addr, Bus, eventBus){
         }
         $.plot(graph, data, options);
     };
+
+    var MyPlot2Axis = function(tx1, dat1, tx2, dat2){
+        graph.width(800).height(300);
+        graph2.width(800).height(300);
+        var options = {
+            series: {
+                lines: { show: true },
+                points: { show: drawDots }
+            }
+        };
+
+        var data =[
+            { label: tx1, data: [ ] }
+        ];
+        var data2 =[
+            { label: tx2, data: [ ] }
+        ];
+        var begin1 = zeroStart ? dat1[0] : 0;
+        var begin2 = zeroStart ? dat2[0] : 0;
+
+        for(var i=0; i<(dat1.length-skipLast-skipFirst); i++){
+            data[0].data[i] = [(i+skipFirst)*0.025, dat1[i+skipFirst] - begin1];
+            data2[0].data[i] = [(i+skipFirst)*0.025, dat2[i+skipFirst] - begin2];
+        }
+        $.plot(graph, data, options);
+        $.plot(graph2, data2, options);
+    };
+
 
 
     var PlotPos = function(){
@@ -329,7 +361,7 @@ function showDriveCtrl(DriveID, DriveName, DriveGroup, Addr, Bus, eventBus){
         cbPing();
     });
     addButton('УпрСк', function() {
-        MyPlot2("Упр", curUst, "Скор", curSpeed);
+        MyPlot2Axis("Упр", curUst, "Скор", curSpeed);
     });
 
 
@@ -339,4 +371,5 @@ function showDriveCtrl(DriveID, DriveName, DriveGroup, Addr, Bus, eventBus){
     div.appendTo(pp);
     new showEditPParams(div);
     graph.appendTo(pp);
+    graph2.appendTo(pp);
 }
