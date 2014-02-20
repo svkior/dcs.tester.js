@@ -5,6 +5,7 @@ A = 200;
 oneWay = true;
 zeroStart = false;
 powerOff = true;
+drawDots = true;
 
 skipLast =0;
 skipFirst = 0;
@@ -65,6 +66,9 @@ function showEditPParams(div){
     addLI('First',skipFirst*0.025,function(val){ skipFirst = Math.round(val/0.025)});
     addLIchkb("Совм", zeroStart, function(val){ zeroStart = val});
     addLIchkb("ВЫКЛ", powerOff, function(val){ powerOff = val});
+    addLIchkb("DOT", drawDots, function(val){
+        drawDots = val;
+    });
     ul.appendTo(div);
     updateDt();
 }

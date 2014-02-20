@@ -24,12 +24,6 @@ function showDriveCtrl(DriveID, DriveName, DriveGroup, Addr, Bus, eventBus){
         return functionToCheck && getType.toString.call(functionToCheck) === '[object Function]';
     }
 
-    var options = {
-        series: {
-            lines: { show: true },
-            points: { show: false }
-        }
-    };
 
     var cbPing = function(){
         return false;
@@ -76,6 +70,7 @@ function showDriveCtrl(DriveID, DriveName, DriveGroup, Addr, Bus, eventBus){
 
     var PlotGraph = function(cb) {
         plotBtn.attr('disabled','disabled');
+
         console.log('Plot Graph');
         eventBus.send('ftp.load', {
             DriveID:DriveID,
@@ -143,6 +138,13 @@ function showDriveCtrl(DriveID, DriveName, DriveGroup, Addr, Bus, eventBus){
 
     var MyPlot1 = function(tx1, dat1){
         graph.width(800).height(600);
+        var options = {
+            series: {
+                lines: { show: true },
+                points: { show: drawDots }
+            }
+        };
+
         var data =[
             { label: tx1, data: [ ] }
         ];
@@ -156,6 +158,13 @@ function showDriveCtrl(DriveID, DriveName, DriveGroup, Addr, Bus, eventBus){
 
     var MyPlot2 = function(tx1, dat1, tx2, dat2){
         graph.width(800).height(600);
+        var options = {
+            series: {
+                lines: { show: true },
+                points: { show: drawDots }
+            }
+        };
+
         var data =[
             { label: tx1, data: [ ] },
             { label: tx2, data: [ ]}
@@ -172,6 +181,13 @@ function showDriveCtrl(DriveID, DriveName, DriveGroup, Addr, Bus, eventBus){
 
     var MyPlot4 = function(tx1, dat1, tx2, dat2, tx3, dat3, tx4, dat4){
         graph.width(800).height(600);
+        var options = {
+            series: {
+                lines: { show: true },
+                points: { show: drawDots }
+            }
+        };
+
         var data =[
             { label: tx1, data: [ ] },
             { label: tx2, data: [ ]},
@@ -195,6 +211,13 @@ function showDriveCtrl(DriveID, DriveName, DriveGroup, Addr, Bus, eventBus){
 
     var MyPlotDiff = function(tx1, dat1, dat2){
         graph.width(800).height(600);
+        var options = {
+            series: {
+                lines: { show: true },
+                points: { show: drawDots }
+            }
+        };
+
         var data =[
             { label: tx1, data: [ ] }
         ];
