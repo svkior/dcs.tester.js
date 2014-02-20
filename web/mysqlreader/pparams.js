@@ -64,7 +64,7 @@ function showEditPParams(div){
     addLI('Last',skipLast*0.025,function(val){ skipLast = Math.round(val/0.025)});
     addLI('First',skipFirst*0.025,function(val){ skipFirst = Math.round(val/0.025)});
     addLIchkb("Совм", zeroStart, function(val){ zeroStart = val});
-    addLIchkb("ВЫКЛ", powerOff, function(val){ powerOff = val});
+    addLIchkb("ВЫКЛ", !powerOff, function(val){ powerOff = !val});
     ul.appendTo(div);
     updateDt();
 }
