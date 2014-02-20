@@ -45,7 +45,7 @@ function showDriveCtrl(DriveID, DriveName, DriveGroup, Addr, Bus, eventBus){
             V: V,
             A: A,
             oneWay: oneWay,
-            powerOff: false // TODO: Passthrough it to UI
+            powerOff: powerOff // TODO: Passthrough it to UI
         }, function(res){
             console.log('GOT RESPAWN!');
             goBtn.removeAttr('disabled');

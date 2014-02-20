@@ -3,7 +3,8 @@ L = 1000;
 V = 200;
 A = 200;
 oneWay = true;
-zeroStart = true;
+zeroStart = false;
+powerOff = true;
 
 skipLast =0;
 skipFirst = 0;
@@ -63,6 +64,7 @@ function showEditPParams(div){
     addLI('Last',skipLast*0.025,function(val){ skipLast = Math.round(val/0.025)});
     addLI('First',skipFirst*0.025,function(val){ skipFirst = Math.round(val/0.025)});
     addLIchkb("Совм", zeroStart, function(val){ zeroStart = val});
+    addLIchkb("ВЫКЛ", powerOff, function(val){ powerOff = val});
     ul.appendTo(div);
     updateDt();
 }
