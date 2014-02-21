@@ -41,7 +41,9 @@ container.deployModule('io.vertx~mod-web-server~2.0.0-final', {
         { address: 'ftp.update'},
         { address: 'ftp.load'},
         { address: 'server.reboot'},
-        { address: 'server.getver'}
+        { address: 'server.getver'},
+        { address: 'dcslnx.getservers'},
+        { address: 'dcslnx.execute'}
     ]
 });
 container.deployModule("io.vertx~mod-mongo-persistor~2.0.0-final",{
@@ -53,6 +55,7 @@ container.deployVerticle('uboot_test2.js');
 container.deployVerticle('ecs/mysql_dataserver.js');
 container.deployVerticle('ecs/ecs_worker.js');
 container.deployVerticle('ecs/ftp_worker.js');
+container.deployVerticle('dcslnx/dcslnx.js');
 
 var eventBus = require('vertx/event_bus');
 

@@ -10,11 +10,18 @@ drawDots = true;
 skipLast =0;
 skipFirst = 0;
 
+begMean = 0;
+endMean = 0;
+
+meanOne = $('<p>');
+meanTwo = $('<p>');
+
 
 function showEditPParams(div){
 
     var ul = $('<ul>');
     var ul2 = $('<ul>');
+    var ul3 = $('<ul>');
 
     var addLI = function(ul, text, iVal, cb){
         var li = $('<li>').text(text + " : ");
@@ -64,13 +71,18 @@ function showEditPParams(div){
     addLI(ul,'V',V/1000, function(val){ V = val*1000; updateDt();});
     addLI(ul,'A',A/1000, function(val){ A = val*1000; updateDt();});
     addLI(ul2,'First',skipFirst*0.025,function(val){ skipFirst = Math.round(val/0.025)});
-    addLI(ul2,'Last',skipLast*0.025,function(val){ skipLast = Math.round(val/0.025)});
+    addLI(ul2,'End',skipLast*0.025,function(val){ skipLast = Math.round(val/0.025)});
     addLIchkb(ul2,"Совм", zeroStart, function(val){ zeroStart = val});
     addLIchkb(ul2,"ВЫКЛ", powerOff, function(val){ powerOff = val});
     addLIchkb(ul2,"DOT", drawDots, function(val){
         drawDots = val;
     });
+
+    addLI(ul3, "НачСр", begMean*0.025, function(val){ begMean = val/0.025});
+    addLI(ul3, "КонСр", endMean*0.025, function(val){ endMean = val/0.025});
+
     ul.appendTo(div);
     ul2.appendTo(div);
+    ul3.appendTo(div);
     updateDt();
 }

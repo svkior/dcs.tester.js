@@ -26,6 +26,12 @@ function showDriveCtrl(DriveID, DriveName, DriveGroup, Addr, Bus, eventBus){
 
 
     var cbPing = function(){
+        var meanSpeed = 0;
+        for(var i=begMean; i<= endMean; i++){
+            meanSpeed += curSpeed[i];
+        }
+        meanSpeed = meanSpeed / (endMean - begMean + 1);
+        meanOne.text('Среднее Ск: ' + meanSpeed);
         return false;
     };
 
@@ -104,6 +110,12 @@ function showDriveCtrl(DriveID, DriveName, DriveGroup, Addr, Bus, eventBus){
                 curAccel[i] = (curSpeed[i] - curSpeed[i-1])/0.025;
                 curAccelT[i] = (curSpeedT[i] - curSpeedT[i-1])/0.025;
             }
+            if(endMean == 0){
+                endMean = curData.length;
+            }
+            if(skipLast == 0){
+                skipLast = curData.length;
+            }
             currentPlot();
             plotBtn.removeAttr('disabled');
             if(isFunction(cb)){
@@ -151,7 +163,8 @@ function showDriveCtrl(DriveID, DriveName, DriveGroup, Addr, Bus, eventBus){
         ];
         var begin1 = zeroStart ? dat1[0] : 0;
 
-        for(var i=0; i<(dat1.length-skipLast-skipFirst); i++){
+        var dataEnd = skipLast > dat1.length ? dat1.length : skipLast;
+        for(var i=0; i<(dataEnd-skipFirst); i++){
             data[0].data[i] = [(i+skipFirst)*0.025, dat1[i+skipFirst] - begin1];
         }
         $.plot(graph, data, options);
@@ -174,7 +187,8 @@ function showDriveCtrl(DriveID, DriveName, DriveGroup, Addr, Bus, eventBus){
         var begin1 = zeroStart ? dat1[0] : 0;
         var begin2 = zeroStart ? dat2[0] : 0;
 
-        for(var i=0; i<(dat1.length-skipLast-skipFirst); i++){
+        var dataEnd = skipLast > dat1.length ? dat1.length : skipLast;
+        for(var i=0; i<(dataEnd-skipFirst); i++){
             data[0].data[i] = [(i+skipFirst)*0.025, dat1[i+skipFirst] - begin1];
             data[1].data[i] = [(i+skipFirst)*0.025, dat2[i+skipFirst] - begin2];
         }
@@ -202,7 +216,10 @@ function showDriveCtrl(DriveID, DriveName, DriveGroup, Addr, Bus, eventBus){
         var begin3 = zeroStart ? dat3[0] : 0;
         var begin4 = zeroStart ? dat4[0] : 0;
 
-        for(var i=0; i<(dat1.length-skipLast-skipFirst); i++){
+
+        var dataEnd = skipLast > dat1.length ? dat1.length : skipLast;
+
+        for(var i=0; i<(dataEnd-skipFirst); i++){
             data[0].data[i] = [(i+skipFirst)*0.025, dat1[i+skipFirst] - begin1];
             data[1].data[i] = [(i+skipFirst)*0.025, dat2[i+skipFirst] - begin1];
             data[2].data[i] = [(i+skipFirst)*0.025, dat3[i+skipFirst] - begin1];
@@ -228,7 +245,8 @@ function showDriveCtrl(DriveID, DriveName, DriveGroup, Addr, Bus, eventBus){
         var begin1 = zeroStart ? dat1[0] : 0;
         var begin2 = zeroStart ? dat2[0] : 0;
 
-        for(var i=0; i<(dat1.length-skipLast-skipFirst); i++){
+        var dataEnd = skipLast > dat1.length ? dat1.length : skipLast;
+        for(var i=0; i<(dataEnd-skipFirst); i++){
             data[0].data[i] = [(i+skipFirst)*0.025, dat1[(i+skipFirst)] - begin1 - (dat2[(i+skipFirst)] - begin2)];
         }
         $.plot(graph, data, options);
@@ -253,7 +271,8 @@ function showDriveCtrl(DriveID, DriveName, DriveGroup, Addr, Bus, eventBus){
         var begin1 = zeroStart ? dat1[0] : 0;
         var begin2 = zeroStart ? dat2[0] : 0;
 
-        for(var i=0; i<(dat1.length-skipLast-skipFirst); i++){
+        var dataEnd = skipLast > dat1.length ? dat1.length : skipLast;
+        for(var i=0; i<(dataEnd-skipFirst); i++){
             data[0].data[i] = [(i+skipFirst)*0.025, dat1[i+skipFirst] - begin1];
             data2[0].data[i] = [(i+skipFirst)*0.025, dat2[i+skipFirst] - begin2];
         }
@@ -361,6 +380,8 @@ function showDriveCtrl(DriveID, DriveName, DriveGroup, Addr, Bus, eventBus){
         cbPing();
     });
 
+
+
     addButton('УпрСк', function() {
         MyPlot2Axis("Упр", curUst, "Скор", curSpeed);
     });
@@ -369,12 +390,12 @@ function showDriveCtrl(DriveID, DriveName, DriveGroup, Addr, Bus, eventBus){
         MyPlot2Axis("Упр", curUst, "Пол", curData);
     });
 
-
-
     ul.appendTo(pp);
     var div = $('<div>');
     div.appendTo(pp);
     new showEditPParams(div);
     graph.appendTo(pp);
     graph2.appendTo(pp);
+    meanOne.appendTo(pp);
+    meanTwo.appendTo(pp);
 }
