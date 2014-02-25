@@ -29,6 +29,7 @@ eventBus.registerHandler('dataserver.getservers', function(args, responder){
            {
                ip: "192.168.100.22",
                name: "Konstantin notebook"
+           }
        ]
    })
 });
