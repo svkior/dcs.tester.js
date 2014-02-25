@@ -57,6 +57,8 @@ eventBus.registerHandler('ecs.go', function(args, responder){
     var maxA = java.lang.Integer(args.A);
     var maxSpeed = java.lang.Integer(1000);
 
+    console.log(maxL + ', ' + mmaxL);
+
     UDPWorker1.SendPacket(2000,[driveNumber, zero]); //Перезаливка параметров в привод
     UDPWorker1.SendPacket(320,[zero,zero]); // Активация Общего ручного режима
     UDPWorker1.SendPacket(321,[groupNumber]);   // Ввод в группу привода
