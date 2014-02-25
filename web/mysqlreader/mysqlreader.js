@@ -45,7 +45,8 @@ function MysqlReader(server, eventBus){
                             return false;
                         };
 
-                        var li = $('<li>').text(DriveGroup + '(' + DriveID + ' (B:' + Bus +',A:' + Addr + ')'  + ' - ');
+                        var li = $('<li>');
+                        li.text('B:' + Bus + ',A:'+ Addr + ' : ');
                         $('<a>').text(DriveName).attr('href','#').on('click', showParams).appendTo(li);
                         li.appendTo(ul);
                     });
