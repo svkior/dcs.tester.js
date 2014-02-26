@@ -4,6 +4,7 @@ function showDriveCtrl(DriveID, DriveName, DriveGroup, Addr, Bus, eventBus){
     var pp = $('.pp');
     pp.empty();
     var ul = $('<ul>');
+    var ul2 = $('<ul>');
     var graph = $('<div>');
     var graph2 = $('<div>');
     var curData = [];
@@ -125,7 +126,10 @@ function showDriveCtrl(DriveID, DriveName, DriveGroup, Addr, Bus, eventBus){
         cbPing();
     };
 
-    var DoAll = function(){
+    var /**
+     * @return {boolean}
+     */
+        DoAll = function(){
         allBtn.attr('disabled','disabled');
         ftpBtn.attr('disabled','disabled');
         plotBtn.attr('disabled','disabled');
@@ -323,7 +327,7 @@ function showDriveCtrl(DriveID, DriveName, DriveGroup, Addr, Bus, eventBus){
     };
 
     // ADD BUTTON
-    var addButton = function(text,cb){
+    var addButton = function(ul, text,cb){
         var li = $('<li>');
         var btn = $('<button>').text(text).appendTo(li).on('click', cb);
         li.appendTo(ul);
@@ -360,37 +364,50 @@ function showDriveCtrl(DriveID, DriveName, DriveGroup, Addr, Bus, eventBus){
         return btn;
     };
 
-    var allBtn = addButton('ВСЁ', DoAll);
+    var allBtn = addButton(ul, 'ВСЁ', DoAll);
 
-    var goBtn = addButton('ECS', DriveGO);
-    var ftpBtn = addButton('FTPGet', GetFTP);
-    var plotBtn = addButton('Plot', PlotGraph);
+    var goBtn = addButton(ul, 'ECS', DriveGO);
+    var ftpBtn = addButton(ul, 'FTPGet', GetFTP);
+    var plotBtn = addButton(ul, 'Plot', PlotGraph);
 
     addRadio('Поз', 'group1', radioPos);
     addRadio('Ск', 'group1', radioSpeed);
     addRadio('Уск', 'group1', radioAccel);
 
-    addButton('Ошибка', PlotErrPos);
-    addButton('Упр', PlotUst);
+    addButton(ul, 'Ошибка', PlotErrPos);
+    addButton(ul, 'Упр', PlotUst);
 
-    addButton('Разн', PlotSpeedDiff);
+    addButton(ul, 'Разн', PlotSpeedDiff);
 
-    addButton('Повтор', function() {
+    addButton(ul, 'Повтор', function() {
         MyPlotDiff("ГенТек-Пред", curData,oldData);
         cbPing();
     });
 
-
-
-    addButton('УпрСк', function() {
+    addButton(ul, 'УпрСк', function() {
         MyPlot2Axis("Упр", curUst, "Скор", curSpeed);
     });
 
-    addButton('УпрПол', function() {
+    addButton(ul, 'УпрПол', function() {
         MyPlot2Axis("Упр", curUst, "Пол", curData);
     });
 
+    var inp1 = $('<input>');
+    inp1.attr('name', id).attr('value',5).addClass('edit').appendTo(ul2);
+
+    addButton(ul2, 'Установка Позиции в', function(){
+        var pos = parseInt(inp1.val());
+        eventBus.send('ecs.position',{
+            DriveGroup:DriveGroup,
+            position: pos
+        }, function(res){
+            console.log('GOT RESPAWN!');
+        });
+        return false;
+    } );
+
     ul.appendTo(pp);
+    ul2.appendTo(pp);
     var div = $('<div>');
     div.appendTo(pp);
     new showEditPParams(div);

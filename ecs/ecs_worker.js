@@ -37,8 +37,16 @@ var UDPWorker1 = undefined;
 
 eventBus.registerHandler('ecs.login', function(args, responder){
     UDPWorker1 = new v(args.ip);
+    responder({status: "ok"});
 });
 
+eventBus.registerHandler('ecs.position', function(args, responder){
+    var position = java.lang.Integer(args.position);
+    var groupNumber = java.lang.Integer(args.DriveGroup);
+
+    UDPWorker1.SendPacket(503,[groupNumber,Position]); // Сброс позиции в 0
+
+});
 
 eventBus.registerHandler('ecs.go', function(args, responder){
 

@@ -37,6 +37,7 @@ container.deployModule('io.vertx~mod-web-server~2.0.0-final', {
         { address: 'dataserver.getconnection'},
         { address: 'ecs.go'},
         { address: 'ecs.login'},
+        { address: 'ecs.position'},
         { address: 'ftp.login'},
         { address: 'ftp.update'},
         { address: 'ftp.load'},
