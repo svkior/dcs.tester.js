@@ -39,6 +39,7 @@ eventBus.registerHandler('ecs.login', function(args, responder){
     UDPWorker1 = new v(args.ip);
 });
 
+
 eventBus.registerHandler('ecs.go', function(args, responder){
 
 
@@ -64,7 +65,7 @@ eventBus.registerHandler('ecs.go', function(args, responder){
     UDPWorker1.SendPacket(321,[groupNumber]);   // Ввод в группу привода
     UDPWorker1.SendPacket(510,[groupNumber]);  // Активировать привод
     UDPWorker1.SendPacket(312, [groupNumber]);
-    UDPWorker1.SendPacket(503,[groupNumber,zero]); // Сброс позиции в 0
+    //UDPWorker1.SendPacket(503,[groupNumber,zero]); // Сброс позиции в 0
     // NOT WORK
     //UDPWorker1.SendPacket(504,[zero, groupNumber]); // Сброс позиции в 0
     vertx.setTimer(2000, function(){
