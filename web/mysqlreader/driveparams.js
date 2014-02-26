@@ -42,10 +42,10 @@ function showDriveParams(DriveID, DriveName, eventBus){
             addToList('Доезд 5с', 'D4', values.D4);
             addToList('Min ', 'D10', values.D10);
             addToList('Max', 'D11', values.D11);
-            //addToList('Спиральная', 'D', values.D);
             addToList('Пос ', 'D1', values.D1);
             addToList('Иос', 'D2', values.D2);
             addToList('Дос', 'D3', values.D3);
+            addToList('Спиральная - 1', 'D8', values.D8);
             addToList('sp_k1', 'sp_k1', values.sp_k1);
             addToList('sp_k2', 'sp_k2', values.sp_k2);
             addToList('sp_k3', 'sp_k3', values.sp_k3);

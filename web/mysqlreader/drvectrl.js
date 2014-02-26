@@ -393,11 +393,10 @@ function showDriveCtrl(DriveID, DriveName, DriveGroup, Addr, Bus, eventBus){
     });
 
     var inp1 = $('<input>');
-    inp1.attr('name', "UstPos").attr('value',5).addClass('edit').appendTo(ul2);
 
 
     addButton(ul2, 'Установка Позиции в', function(){
-        var pos = parseInt(inp1.val());
+        var pos =  Math.round(parseFloat(inp1.val())*1000.0);
         eventBus.send('ecs.position',{
             DriveGroup:DriveGroup,
             position: pos
@@ -406,6 +405,10 @@ function showDriveCtrl(DriveID, DriveName, DriveGroup, Addr, Bus, eventBus){
         });
         return false;
     } );
+    inp1.attr('name', "UstPos").attr('value',5).addClass('edit').appendTo(ul2);
+    $('<li>').text('метров').appendTo(ul2);
+
+
 
     ul.appendTo(pp);
     ul2.appendTo(pp);
