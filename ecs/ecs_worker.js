@@ -44,7 +44,7 @@ eventBus.registerHandler('ecs.position', function(args, responder){
     var position = java.lang.Integer(args.position);
     var groupNumber = java.lang.Integer(args.DriveGroup);
 
-    UDPWorker1.SendPacket(503,[groupNumber,Position]); // Сброс позиции в 0
+    UDPWorker1.SendPacket(503,[groupNumber,position]); // Сброс позиции в 0
 
 });
 

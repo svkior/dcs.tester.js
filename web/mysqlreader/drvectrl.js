@@ -393,7 +393,8 @@ function showDriveCtrl(DriveID, DriveName, DriveGroup, Addr, Bus, eventBus){
     });
 
     var inp1 = $('<input>');
-    inp1.attr('name', id).attr('value',5).addClass('edit').appendTo(ul2);
+    inp1.attr('name', "UstPos").attr('value',5).addClass('edit').appendTo(ul2);
+
 
     addButton(ul2, 'Установка Позиции в', function(){
         var pos = parseInt(inp1.val());
