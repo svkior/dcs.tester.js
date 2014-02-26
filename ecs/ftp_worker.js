@@ -39,7 +39,7 @@ eventBus.registerHandler('ftp.load', function(args, responder){
     var vals = ftpTelemetry.getSensVal();
     var trajv = ftpTelemetry.getTrgenVal();
     var ustv   = ftpTelemetry.getRegVal();
-    
+
 
     var telem = [];
     var traj = [];

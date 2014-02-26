@@ -12,7 +12,7 @@ eventBus.registerHandler('dataserver.getservers', function(args, responder){
        data:[
            {
                ip: '127.0.0.1',
-               name: 'Локальный Сервер'
+               name: 'ЛокСер'
            },
            {
                ip: "192.168.3.2",
@@ -20,15 +20,15 @@ eventBus.registerHandler('dataserver.getservers', function(args, responder){
            },
            {
                ip: "192.168.100.98",
-               name: 'Орловский Сервер VPN'
+               name: 'ОрловСерVPN'
            },
            {
                ip: "192.168.99.241",
-               name: 'Орловский Сервер'
+               name: 'ОрловСер'
            },
            {
-               ip: "192.168.100.22",
-               name: "Konstantin notebook"
+               ip: "192.168.100.26",
+               name: "Konstantin"
            }
        ]
    })

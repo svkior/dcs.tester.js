@@ -7,6 +7,10 @@ function showDriveParams(DriveID, DriveName, eventBus){
             status.appendTo(params);
             var ul = $('<ul>');
 
+            var btnli = $('<li>');
+            var btn = $('<button>').text('Записать Все');
+
+            btn.appendTo(btnli);
 
             var addToList = function(text, id, key){
                 var editCallback = function(){
@@ -23,9 +27,28 @@ function showDriveParams(DriveID, DriveName, eventBus){
                     });
                     return false;
                 };
+
+
+
+
                 var form = $('<form>').on('submit',editCallback);
                 var lab = $('<label>');
-                $('<input>').attr('name', id).attr('value',key).addClass('edit').appendTo(lab);
+                var inp = $('<input>').attr('name', id).attr('value',key).addClass('edit');
+                inp.appendTo(lab);
+
+                btn.on('click',function(){
+                   console.log('Записать в ' + id + ' значение ' + inp.val());
+                   inp.prop('readonly', true);
+                    eventBus.send('datasever.driveparameterupdate',{
+                        DriveID: DriveID,
+                        param: id,
+                        value: inp.val()
+                    }, function(resp){
+                        console.log(resp);
+                        inp.prop('readonly', false);
+                    });
+                });
+
                 $('<strong>').text(text + ' (' + id + ')').appendTo(lab);
                 lab.appendTo(form);
                 var li = $('<li>');
@@ -34,6 +57,7 @@ function showDriveParams(DriveID, DriveName, eventBus){
             };
             var values = resp.data[0];
 
+            btnli.appendTo(ul);
             addToList('Подставка', 'D5', values.D5);
             addToList('РучнойР', 'D12', values.D12);
             addToList('Ппрям', 'D22', values.D22);
@@ -54,6 +78,7 @@ function showDriveParams(DriveID, DriveName, eventBus){
             addToList('sp_invk2', 'sp_invk2', values.sp_invk2);
             addToList('sp_invk3', 'sp_invk3', values.sp_invk3);
             addToList('sp_invk4', 'sp_invk4', values.sp_invk4);
+
 
             ul.appendTo(params);
         });
