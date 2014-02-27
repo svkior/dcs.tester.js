@@ -49,18 +49,17 @@ eventBus.registerHandler('ftp.load', function(args, responder){
     var traj = [];
     var ust = [];
     //var enc = [];
-    console.log('!!!!!');
-    console.log(vals.getClass().getName());
-    console.log('!!!!!');
-    if(vals.getClass().getName() === 'java.util.ArrayList'){
-        console.log('Есть че');
+
+    try {
         for(var i=0; i<vals.size(); i++){
             telem[i] = vals.get(i);
             traj[i] = trajv.get(i);
             ust[i] = ustv.get(i);
             // enc[i] = enc.get(i);
         }
-    } else {
+
+
+    } catch (e){
         console.log('Никуда не ездили');
     }
 
