@@ -48,6 +48,7 @@ eventBus.registerHandler('ftp.load', function(args, responder){
     //var enc = [];
     console.log('!!!!!');
     console.log(Object.prototype.toString.call(vals));
+    console.log(vals.getClass().getName());
     console.log('!!!!!');
     if(Object.prototype.toString.call(vals) === 'object JavaObject'){
         console.log('Есть че');
