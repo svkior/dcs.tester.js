@@ -39,26 +39,26 @@ eventBus.registerHandler('ftp.load', function(args, responder){
     var vals = ftpTelemetry.getSensVal();
     var trajv = ftpTelemetry.getTrgenVal();
     var ustv   = ftpTelemetry.getRegVal();
-    var encoder = ftpTelemetry.getEncoder();
+   // var encoder = ftpTelemetry.getEncoder();
 
 
     var telem = [];
     var traj = [];
     var ust = [];
-    var enc = [];
+    //var enc = [];
     for(var i=0; i<vals.size(); i++){
         telem[i] = vals.get(i);
         traj[i] = trajv.get(i);
         ust[i] = ustv.get(i);
-        enc[i] = enc.get(i);
+       // enc[i] = enc.get(i);
     }
 
     responder({
         status: 'ok',
         data: telem,
         traj: traj,
-        ust: ust,
-        enc: enc
+        ust: ust
+        //enc: enc
     });
 
 });
