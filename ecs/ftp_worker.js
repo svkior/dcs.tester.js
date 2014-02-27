@@ -46,6 +46,9 @@ eventBus.registerHandler('ftp.load', function(args, responder){
     var traj = [];
     var ust = [];
     //var enc = [];
+    console.log('!!!!!');
+    console.log(Object.prototype.toString.call(vals));
+    console.log('!!!!!');
     for(var i=0; i<vals.size(); i++){
         telem[i] = vals.get(i);
         traj[i] = trajv.get(i);
