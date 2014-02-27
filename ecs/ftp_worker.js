@@ -49,11 +49,16 @@ eventBus.registerHandler('ftp.load', function(args, responder){
     console.log('!!!!!');
     console.log(Object.prototype.toString.call(vals));
     console.log('!!!!!');
-    for(var i=0; i<vals.size(); i++){
-        telem[i] = vals.get(i);
-        traj[i] = trajv.get(i);
-        ust[i] = ustv.get(i);
-       // enc[i] = enc.get(i);
+    if(Object.prototype.toString.call(vals) === 'object JavaObject'){
+        console.log('Есть че');
+        for(var i=0; i<vals.size(); i++){
+            telem[i] = vals.get(i);
+            traj[i] = trajv.get(i);
+            ust[i] = ustv.get(i);
+            // enc[i] = enc.get(i);
+        }
+    } else {
+        console.log('Никуда не ездили');
     }
 
     responder({
