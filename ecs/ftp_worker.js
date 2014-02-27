@@ -19,7 +19,7 @@ eventBus.registerHandler('ftp.login', function(args, responder){
 
 eventBus.registerHandler('ftp.update', function(args, responder){
 
-    var oldPP = new java.io.File('./working/' + ip + 'drive_' + args.DriveID + '_' + args.Bus + '_' + args.Addr);
+    var oldPP = new java.io.File('./working/' + ip + '/drive_' + args.DriveID + '_' + args.Bus + '_' + args.Addr);
     oldPP['delete']();
 
     ftpTelemetry.updateTelemetry(
