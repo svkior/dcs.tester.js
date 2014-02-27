@@ -8,16 +8,19 @@ var eventBus = require('vertx/event_bus');
 var FtpWorker = Packages.ru.scircus.mech.GetFTPTelemetry;
 
 var ftpTelemetry = undefined;
-
+var ip = undefined;
 
 eventBus.registerHandler('ftp.login', function(args, responder){
-    ftpTelemetry = new FtpWorker(args.ip);
+    ip = args.ip;
+    ftpTelemetry = new FtpWorker(ip);
     responder({status: 'ok'});
 });
 
 
 eventBus.registerHandler('ftp.update', function(args, responder){
 
+    var oldPP = new java.io.File('./working/' + ip + 'drive_' + args.DriveID + '_' + args.Bus + '_' + args.Addr);
+    oldPP['delete']();
 
     ftpTelemetry.updateTelemetry(
         java.lang.Integer(args.DriveID), // Drive Number
