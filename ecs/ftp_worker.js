@@ -47,10 +47,9 @@ eventBus.registerHandler('ftp.load', function(args, responder){
     var ust = [];
     //var enc = [];
     console.log('!!!!!');
-    console.log(Object.prototype.toString.call(vals));
     console.log(vals.getClass().getName());
     console.log('!!!!!');
-    if(Object.prototype.toString.call(vals) === 'object JavaObject'){
+    if(vals.getClass().getName() === 'java.util.ArrayList'){
         console.log('Есть че');
         for(var i=0; i<vals.size(); i++){
             telem[i] = vals.get(i);
