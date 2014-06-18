@@ -29,6 +29,10 @@ eventBus.registerHandler('dataserver.getservers', function(args, responder){
            {
                ip: "192.168.100.26",
                name: "Konstantin"
+           },
+           {
+               ip: "10.211.55.6",
+               name: 'SVKior EMU'
            }
        ]
    })

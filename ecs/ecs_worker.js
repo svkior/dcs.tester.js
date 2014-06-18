@@ -37,6 +37,7 @@ var UDPWorker1 = undefined;
 
 eventBus.registerHandler('ecs.login', function(args, responder){
     UDPWorker1 = new v(args.ip);
+
     responder({status: "ok"});
 });
 
@@ -103,3 +104,4 @@ eventBus.registerHandler('ecs.go', function(args, responder){
     });
     console.log('YOHOHO!');
 });
+

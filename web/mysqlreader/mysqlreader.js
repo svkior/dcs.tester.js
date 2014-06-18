@@ -39,9 +39,11 @@ function MysqlReader(server, eventBus){
                         var Addr = res.data[0].Param & 0xff;
                         var Bus = res.data[0].Param >>> 16;
 
+                        var shDP = undefined;
+                        var shDC = undefined;
                         var showParams = function(){
-                            new showDriveParams(DriveID, DriveName, eventBus);
-                            new showDriveCtrl(DriveID, DriveName, DriveGroup, Addr, Bus, eventBus);
+                             new showDriveParams(DriveID, DriveName, eventBus);
+                             new showDriveCtrl(DriveID, DriveName, DriveGroup, Addr, Bus, eventBus);
                             return false;
                         };
 

@@ -3,6 +3,9 @@ function showDriveCtrl(DriveID, DriveName, DriveGroup, Addr, Bus, eventBus){
     console.log('Drive Controls');
     var pp = $('.pp');
     pp.empty();
+
+    var hh = $('<h3>').text(DriveName);
+    hh.appendTo(pp);
     var ul = $('<ul>');
     var ul2 = $('<ul>');
     var graph = $('<div>');
@@ -84,7 +87,7 @@ function showDriveCtrl(DriveID, DriveName, DriveGroup, Addr, Bus, eventBus){
             Bus:Bus,
             Addr:Addr
         }, function(res){
-           console.log(res);
+           //console.log(res);
 
             oldData = curData;
             oldTraj = curTraj;

@@ -1,4 +1,5 @@
 .idea/*
+*.iml
 nohup.out
 mods/*
 temp*

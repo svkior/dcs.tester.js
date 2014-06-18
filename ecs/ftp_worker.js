@@ -33,13 +33,11 @@ eventBus.registerHandler('ftp.update', function(args, responder){
 
 eventBus.registerHandler('ftp.load', function(args, responder){
 
-    console.log("Запускаем loadTelemetry");
     ftpTelemetry.loadTelemetry(
         java.lang.Integer(args.DriveID), // Drive Number
         java.lang.Integer(args.Bus),
         java.lang.Integer(args.Addr)
     );
-    console.log("Запустили loadTelemetry")
 
     var vals = ftpTelemetry.getSensVal();
     var trajv = ftpTelemetry.getTrgenVal();

@@ -1,5 +1,6 @@
 #!/bin/sh
 
+echo Hello, World!
 while [ 1 ]
 do
 sync
